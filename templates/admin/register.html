@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/reg-form.css') }}">
+	<title>Student Registration Form</title>
+</head>
+<body>
+
+	<h1>Student Registration Form</h1>
+
+<div class="reg">
+	<form action="/register-success" method="POST">
+		<div class="form-group">
+			<label for="name">Name:</label>
+			<input type="text" class="form-control" id="name" name="name" required pattern="[A-Za-z -]+" placeholder="John Doe">
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" class="form-control" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="johndoe@example.com">
+
+		</div>
+		<div class="form-group">
+			<label for="register_number">Register Number:</label>
+			<input type="text" class="form-control" id="register_number" name="register_number" required pattern="([cC][eE][cC]|[lL][cC][eE][cC])[0-9]{2}([cC][sS]|[eE][cC]|[eE][eE][eE])[0-9]{3}" placeholder="CEC02CS001">
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone Number:</label>
+			<input type="tel" class="form-control" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="9876543210"> <label for="phone">Phone Number:</label>
+		</div>
+		<div class="form-group">
+		  <label for="address">Address:</label>
+		  <textarea class="form-control" id="address" name="address" required></textarea>
+		</div>
+		<div class="form-group">
+		  <label for="dob">Date of Birth:</label>
+		  <input type="date" class="form-control" id="dob" name="dob" required>
+		</div>
+		<div class="form-group">
+		  <label for="gender">Gender:</label><br>
+		  <div class="form-check form-check-inline">
+			<input type="radio" class="form-check-input" id="male" name="gender" value="male" required>
+			<label class="form-check-label" for="male">Male</label>
+		  </div>
+		  <div class="form-check form-check-inline">
+			<input type="radio" class="form-check-input" id="female" name="gender" value="female" required>
+			<label class="form-check-label" for="female">Female</label>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label for="branch">Branch:</label>
+		  <select class="form-control" id="branch" name="branch" required>
+			<option value="">Select Branch</option>
+			<option value="Computer Science">Computer Science</option>
+			<option value="Electronics and Communication">Electronics and Communication</option>
+			<option value="Mechanical">Mechanical</option>
+			<option value="Civil">Civil</option>
+		  </select>
+		</div>
+		<div class="form-group">
+		  <label for="semester">Semester:</label>
+		  <select class="form-control" id="semester" name="semester" required>
+			<option value="">Select Semester</option>
+			<option value="1st">1st</option>
+			<option value="2nd">2nd</option>
+			<option value="3rd">3rd</option>
+			<option value="4th">4th</option>
+			<option value="5th">5th</option>
+			<option value="6th">6th</option>
+			<option value="7th">7th</option>
+			<option value="8th">8th</option>
+		  </select>
+		</div>
+		<button type="submit" class="btn btn-primary">Register</button>
+	  </form>
+	  
+</div>
+</body>
+</html>

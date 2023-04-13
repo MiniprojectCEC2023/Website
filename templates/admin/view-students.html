@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <title>View Students</title>
+</head>
+<body>
+    <h1>Registered Students</h1>
+    <a href="/admin-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Register number</th>
+                    <th>Semester</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student['name'] }}</td>
+                    <td>{{ student['email'] }}</td>
+                    <td>{{ student['register_number'] }}</td>
+                    <td>{{ student['semester'] }}</td>
+                    <td><a href="/edit-student/{{ student['register_number'] }}" class="edit-btn"><i class="fas fa-edit"></i></a></td>
+                    <td>
+                        <form action="/delete-student/{{ student['register_number'] }}" method="GET">
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+              {% endfor %}
+              
+          
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students found.</p>
+    {% endif %}
+</body>
+</html>
+

@@ -1,0 +1,149 @@
+/* Apply a reset to remove default styles */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set a background color for the page */
+
+body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+/* Center the title */
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: rgb(0, 102, 204);
+}
+a:hover .fa-home {
+    color: rgb(0, 102, 204);
+}
+/* Style the logout button */
+
+.logout-btn {
+  display: inline-block;
+  float: right;
+  font-size: 24px;
+  color: #555;
+  text-decoration: none;
+  margin: 20px;
+}
+
+/* Style the table */
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 800px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the table headers */
+
+th {
+  background-color: #f2f2f2;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Style the table cells */
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+ 
+
+/* Style the update button */
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #388e3c;
+    border-color: #388e3c;
+  }
+  
+  
+/* Style the update form */
+
+#myTable {
+  margin: 20px auto;
+}
+
+#myTable th {
+  width: 40%;
+}
+
+#myTable td {
+  width: 60%;
+}
+
+#myTable form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+#myTable label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#myTable select {
+  margin-bottom: 10px;
+}
+
+#myTable input[type="submit"] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  #myTable input[type="submit"]:hover {
+    background-color: #388e3c;
+    border-color: #388e3c;
+  }
+  
+/* Style the colors of the fee status */
+
+span {
+  font-weight: bold;
+}
+
+span[style="color: green;"] {
+  color: green;
+}
+
+span[style="color: red;"] {
+  color: red;
+}

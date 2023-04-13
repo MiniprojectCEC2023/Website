@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-jWFGP+AAOsxIgRRxv5ar1Hth8akl5DdNV5g5rLGBchGWtLILMfI1dR+ebvMPbNRGAv8Xnyodf3c+Q2Sog0Tpgw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <title>View Library Students</title>
+</head>
+<body>
+    <h1>College bus Students</h1>
+    <a href="/college-office-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Register number</th>
+                    <th>Semester</th>
+                    <th>View Profile</th>
+                    <th>Delete Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for student in students %}
+              <tr>
+                  <td>{{ student[0] }}</td>
+                  <td>{{ student[1] }}</td>
+                  <td>{{ student[2] }}</td>
+                  <td>{{ student[3] }}</td>
+                  <td>
+                    <form action="/bus_profile/{{ student[2] }}" method="GET">
+                      <button type="submit" class="btn btn-primary"><i class="fas fa-user"></i></button>
+                  </form>                  
+                  </td>
+                  <td>
+                    <form action="/delete-std-bus/{{ student[2] }}" method="GET">
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </td>
+              </tr>
+          {% endfor %}
+          
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students found.</p>
+    {% endif %}
+</body>
+</html>

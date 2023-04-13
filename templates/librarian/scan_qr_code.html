@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scan QR Code</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6 mt-5">
+				<div class="card">
+					<div class="card-header text-center">
+						Scan QR Code
+					</div>
+					<div class="card-body text-center">
+						<div class="row justify-content-center">
+							<div class="col-md-8">
+								<video id="qr-video" width="100%"></video>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Create a new scanner object
+		let scanner = new Instascan.Scanner({ video: document.getElementById('qr-video') });
+
+		// Add a callback function to handle successful scan
+		scanner.addListener('scan', function(content) {
+			// Create a hidden form to submit the scanned image data
+			let form = document.createElement('form');
+			form.method = 'POST';
+			form.action = '/lib_profile_qr';
+			form.style.display = 'none';
+
+			// Create an input field for the image data
+			let input = document.createElement('input');
+			input.type = 'hidden';
+			input.name = 'image_data';
+			input.value = content;
+
+			// Append the input field to the form
+			form.appendChild(input);
+
+			// Submit the form
+			document.body.appendChild(form);
+			form.submit();
+		});
+
+		// Start the scanner
+		Instascan.Camera.getCameras().then(function(cameras) {
+			if (cameras.length > 0) {
+				scanner.start(cameras[0]);
+			} else {
+				alert('No cameras found.');
+			}
+		}).catch(function(e) {
+			alert('Error: ' + e);
+		});
+	</script>
+</body>
+</html>

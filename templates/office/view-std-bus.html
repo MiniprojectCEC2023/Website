@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Nq3EWjWb75cL81rwaIahyXhqJL8jKg5/W5G5BY04anPjkxh8JpY+ejgchzbxgejXofMFlJWIM5G5/hCG+x5aLw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <title>Add Students To Library</title>
+</head>
+<body>
+    <h1>Add Students</h1>
+    <a href="/college-office-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Register number</th>
+                    <th>Semester</th>
+                    <th>Add students to library</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for student in students %}
+              <tr>
+                  <td>{{ student[0] }}</td>
+                  <td>{{ student[1] }}</td>
+                  <td>{{ student[2] }}</td>
+                  <td>{{ student[3] }}</td>
+                  <td>
+                    <form action="/add_bus/{{ student[2] }}" method="GET">
+                      <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i></button>
+                  </form>
+                  
+                </td>
+              </tr>
+          {% endfor %}
+          
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students found.</p>
+    {% endif %}
+</body>
+</html>

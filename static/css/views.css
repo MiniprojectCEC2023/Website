@@ -1,0 +1,103 @@
+/* Set default font family and size */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  /* Style the page title */
+  h1 {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 36px;
+  }
+  
+  /* Style the logout button */
+  .logout-btn {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  /* Style the table */
+  table {
+    margin: 50px auto;
+    border-collapse: collapse;
+    width: 80%;
+  }
+  
+  /* Style the table headers */
+  thead th {
+    background-color: #110760;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+  }
+  
+  /* Style the table rows */
+  tbody tr {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* Style the table data cells */
+  td {
+    padding: 10px;
+  }
+  a:hover .fa-edit {
+    color: rgb(0, 128, 0);
+  }
+  a:hover .fa-home {
+    color: rgb(0, 102, 204);
+  }
+  button:hover .fa-trash-alt {
+    color: rgb(255, 0, 0);
+  }
+  button:hover .fa-user {
+    color: rgb(0, 102, 204);
+  }
+  button:hover .fa-plus {
+    color: rgb(0, 128, 0);
+  }
+  
+
+  
+  
+  /* Style the Edit and Delete icons */
+  i.fas {
+    font-size: 20px;
+    color: #000000;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  /* Style the Delete button */
+  .btn-danger {
+    background-color: #00000000;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+
+  form {
+    display: inline-block;
+  }
+  
+  button {
+    background-color: #00000000;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+ 
+  

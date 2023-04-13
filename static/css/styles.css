@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(45deg, #282828, #1c1c1c);
+  font-family: Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Floating navigation bar */
+.navbar {
+  background: linear-gradient(45deg, #8a134a, #0b346e, #0a6f1e);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  padding-top: 10px;
+}
+
+.navbar a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  margin-top: 15px; /* add margin-top */
+}
+
+
+
+.navbar a:hover {
+  text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff;
+}
+
+.navbar h1 {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  margin: 10px 0 0 16px;
+  padding: 14px 16px;
+  font-size: 24px;
+}
+
+.search-container {
+  float: left;
+  padding: 14px 16px;
+}
+
+.search-container input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+}
+
+.search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background-color: #333;
+  color: #f2f2f2;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Styles for Register and Home buttons */
+.register-btn, .home-btn {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  background-color: #110760;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.register-btn:hover, .home-btn:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.content {
+  margin-top: 80px;
+  padding: 20px;
+}
+
+.content h2 {
+  margin-top: 0;
+  font-size: 28px;
+}
+
+.content p {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+
+
