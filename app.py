@@ -15,16 +15,24 @@ import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/admin'
-mongo = PyMongo(app)
-# Connect to MongoDB
-""" client = MongoClient("mongodb+srv://shiban:hqwaSJns8vkQVVtk@cluster0.6dhrc7h.mongodb.net/test") 
-db = client['myapp'] """
-client = MongoClient("mongodb://localhost:27017") 
-db = client['admin']
+mode='local'
 
+if mode=='local':
+    app = Flask(__name__)
+    app.secret_key = 'your_secret_key_here'
+    app.config['MONGO_URI'] = 'mongodb://localhost:27017/admin'
+    mongo = PyMongo(app)
+    # Connect to MongoDB
+    client = MongoClient("mongodb://localhost:27017") 
+    db = client['admin']
+else:
+    app = Flask(__name__)
+    app.secret_key = 'your_secret_key_here'
+    app.config['MONGO_URI'] = 'mongodb://localhost:27017/myapp'
+    mongo = PyMongo(app)
+    # Connect to MongoDB
+    client = MongoClient("mongodb+srv://shiban:hqwaSJns8vkQVVtk@cluster0.6dhrc7h.mongodb.net/test") 
+    db = client['myapp']
 
 
 ################################################################
@@ -139,7 +147,8 @@ def success():
 @app.route('/view-students')
 def view_students():
     if session.get('username') == 'admin':
-        students = mongo.db.student.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        students_cursor = db.student.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        students = list(students_cursor)
         return render_template('admin/view-students.html', students=students)
     else:
         error = 'You need to log in as admin first.'
@@ -148,16 +157,17 @@ def view_students():
         return redirect('/admin-login')
 
 
+
 # Route to update semester of students by admin
 @app.route('/edit-student/<register_number>', methods=['GET', 'POST'])
 def edit_student(register_number):
     if session.get('username') == 'admin':
-        student = mongo.db.student.find_one({'register_number': register_number})
+        student = db.student.find_one({'register_number': register_number})
         if request.method == 'POST':
             semester = request.form['semester']
-            mongo.db.student.update_one({'register_number': register_number}, {'$set': {'semester': semester}})
-            mongo.db.library.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
-            mongo.db.bus.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
+            db.student.update_one({'register_number': register_number}, {'$set': {'semester': semester}})
+            db.library.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
+            db.bus.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
             db.bus.update_one({'register_number': register_number}, {'$set': {'fee_paid': '0'}})
             flash('Student record updated successfully')
             return redirect('/view-students')
