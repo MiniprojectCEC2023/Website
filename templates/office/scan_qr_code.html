@@ -19,8 +19,8 @@
   // Start the camera and get the stream
   const scanner = new Instascan.Scanner({ video: video });
   scanner.addListener('scan', function (content) {
-    // Redirect to the lib_profile_qr route with the scanned QR code data
-    window.location.href = "/lib_profile_qr?data=" + content;
+    // Redirect to the bus_profile_qr route with the scanned QR code data
+    window.location.href = "/bus_profile_qr?data=" + content;
   });
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {

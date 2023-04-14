@@ -34,6 +34,28 @@ a:hover .fa-home {
   text-decoration: none;
   margin: 20px;
 }
+#scan-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  transition: all .2s ease;
+  z-index: 9999;
+  font-size: 24px; /* set the font size to 24px */
+}
+
+
+#scan-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+}
 
 /* Style the table */
 

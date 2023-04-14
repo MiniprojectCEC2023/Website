@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-jWFGP+AAOsxIgRRxv5ar1Hth8akl5DdNV5g5rLGBchGWtLILMfI1dR+ebvMPbNRGAv8Xnyodf3c+Q2Sog0Tpgw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
     <title>View Library Students</title>
 </head>
 <body>
@@ -25,17 +23,17 @@
             <tbody>
               {% for student in students %}
               <tr>
-                  <td>{{ student[0] }}</td>
-                  <td>{{ student[1] }}</td>
-                  <td>{{ student[2] }}</td>
-                  <td>{{ student[3] }}</td>
+                <td>{{ student['name'] }}</td>
+                <td>{{ student['email'] }}</td>
+                <td>{{ student['register_number'] }}</td>
+                <td>{{ student['semester'] }}</td>
                   <td>
-                    <form action="/bus_profile/{{ student[2] }}" method="GET">
+                    <form action="/bus_profile/{{ student['register_number'] }}" method="GET">
                       <button type="submit" class="btn btn-primary"><i class="fas fa-user"></i></button>
                   </form>                  
                   </td>
                   <td>
-                    <form action="/delete-std-bus/{{ student[2] }}" method="GET">
+                    <form action="/delete-std-bus/{{ student['register_number'] }}" method="GET">
                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>

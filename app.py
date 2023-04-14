@@ -60,6 +60,7 @@ def admin_login():
     else:
         return render_template('admin/admin-login.html')
 
+
 #Route to get admin dashboard
 @app.route('/admin-dashboard')
 def admin_dashboard():
@@ -71,10 +72,13 @@ def admin_dashboard():
         logging.warning(error)
         return redirect('/admin-login')
 
+
 #Route to get register form page
 @app.route('/register')
 def registers():
     return render_template('admin/register.html')
+
+
 #Route to submit registration form
 @app.route("/register-success", methods=["POST"])
 def register():
@@ -125,11 +129,11 @@ def register():
         return render_template('admin/register.html')
 
 
-
 #Route to return registration success message
 @app.route("/register-success")
 def success():
     return "Registration successful!"
+
 
 # Route for students viewing for admin
 @app.route('/view-students')
@@ -143,6 +147,7 @@ def view_students():
         logging.warning(error)
         return redirect('/admin-login')
 
+
 # Route to update semester of students by admin
 @app.route('/edit-student/<register_number>', methods=['GET', 'POST'])
 def edit_student(register_number):
@@ -151,6 +156,9 @@ def edit_student(register_number):
         if request.method == 'POST':
             semester = request.form['semester']
             mongo.db.student.update_one({'register_number': register_number}, {'$set': {'semester': semester}})
+            mongo.db.library.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
+            mongo.db.bus.update_many({'register_number': register_number}, {'$set': {'semester': semester}})
+            db.bus.update_one({'register_number': register_number}, {'$set': {'fee_paid': '0'}})
             flash('Student record updated successfully')
             return redirect('/view-students')
         name = student['name']  # get student name from database
@@ -161,6 +169,7 @@ def edit_student(register_number):
         logging.warning(error)
         return redirect('/admin-login')
 
+
 # Route to delete students by admin
 @app.route('/delete-student/<register_number>', methods=['GET'])
 def delete_student(register_number):
@@ -168,6 +177,8 @@ def delete_student(register_number):
         student = db.student.find_one({'register_number': register_number})
         if student:
             db.student.delete_one({'register_number': register_number})
+            db.library.delete_many({'register_number': register_number})
+            db.bus.delete_many({'register_number': register_number})
             flash('Student record deleted successfully')
         else:
             flash('Student record not found')
@@ -177,6 +188,9 @@ def delete_student(register_number):
         flash(error)
         logging.warning(error)
         return redirect('/admin-login')
+
+
+
 
 ################################################################
 #----------------------------LIBRARY---------------------------#
@@ -210,7 +224,9 @@ def librarian_dashboard():
         flash(error)
         logging.warning(error)
         return redirect('/librarian-login')
-    # Route for viewing students who are not added to library by librarian
+
+
+# Route for viewing students who are not added to library by librarian
 @app.route('/view-std-lib')
 def view_std_lib():
     if session.get('username') == 'library':
@@ -222,6 +238,8 @@ def view_std_lib():
         logging.warning(error)
         return redirect('/librarian-login')
 
+
+#Route to add students to library
 @app.route('/add_lib/<register_number>', methods=['GET'])
 def add_to_lib(register_number):
     if session.get('username') == 'library':
@@ -252,6 +270,7 @@ def add_to_lib(register_number):
         return redirect('/librarian-login')
 
 
+#Route to view library students
 @app.route('/reg_lib')
 def reg_lib():
     if session.get('username') == 'library':
@@ -264,6 +283,284 @@ def reg_lib():
         return redirect('/librarian-login')
 
 
+# Route to view each library profile of students
+@app.route('/lib_profile/<string:register_number>')
+def lib_profile(register_number):
+    # Get student's record from the database
+    student = db.library.find_one({'register_number': register_number})
+    # Check if student exists
+    if not student:
+        flash('Student not found.')
+        logging.warning('Student not found.')
+        return redirect('/')
+    # Render the template with the student's information and book details
+    return render_template('librarian/lib_profile.html', student=student)
+
+
+#Route to upadate book availability of student
+@app.route('/update_info/<string:register_number>', methods=['POST'])
+def update_info(register_number):
+    books_available = request.form.get('books_available')
+    
+    # Update the student information in your database
+    student = db.library.find_one({'register_number': register_number})
+    if student:
+        db.library.update_one({'register_number': register_number}, {'$set': {'max_book': int(books_available)}})
+        student['max_book'] = int(books_available)
+    else:
+        return render_template('error.html', message='Student not found.')
+    
+    return render_template('librarian/lib_profile.html', student=student)
+
+
+# Route to delete library profile
+@app.route('/delete-std-lib/<register_number>', methods=['GET'])
+def delete_std_lib(register_number):
+    if session.get('username') == 'library':
+        student = db.library.find_one({'register_number': register_number})
+        if student:
+            db.library.delete_one({'register_number': register_number})
+            db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 0}})
+            flash('Student record deleted successfully')
+            return redirect('/reg_lib')
+        else:
+            error = 'Student record not found'
+            flash(error)
+            logging.warning(error)
+            return redirect('/reg_lib')
+    else:
+        error = 'You need to log in as librarian first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/librarian-login')
+
+
+#Route to open scanner
+@app.route('/qrlib')
+def qrlib():
+    return render_template('librarian/scan_qr_code.html')
+
+
+#Route to view library profile after scanning
+@app.route('/lib_profile_qr', methods=['GET'])
+def lib_profile_qr():
+    # Get the QR code data from the URL parameters
+    data = request.args.get('data')
+    
+    # Split the data string into individual data elements
+    data_elements = data.split(',')
+    
+    # Extract the register number from the data
+    register_number = ''
+    for element in data_elements:
+        if 'Register Number:' in element:
+            register_number = element.split(': ')[1]
+            break
+    
+    # Find the document in the 'library' collection with the matching register number
+    student = db.library.find_one({'register_number': register_number})
+    
+    # If the student variable is None, render an error message
+    if student is None:
+        return render_template('librarian/invalid_qr.html')
+    
+    # Render a template that displays the document
+    return render_template('librarian/lib_profile_scaned.html', student=student)
+
+
+
+################################################################
+#----------------------------OFFICE----------------------------#
+################################################################
+
+
+#Route to get office login page and login to office dashboard
+@app.route('/college-office-login', methods=['GET', 'POST'])
+def college_office_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == 'office' and password == 'o1234':
+            session['username'] = username
+            return redirect('/college-office-dashboard')
+        else:
+            error = 'Invalid username or password'
+            flash(error)
+            logging.warning(error)
+            return render_template('office/college-office-login.html')
+    else:
+        return render_template('office/college-office-login.html')
+
+
+#Route to get office dashboard
+@app.route('/college-office-dashboard')
+def college_office_dashboard():
+    if session.get('username') == 'office':
+        return render_template('office/college-office-dashboard.html')
+    else:
+        error = 'You need to log in as college office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/college-office-login')
+
+
+# Route for viewing students who have not registered for college bus by office
+@app.route('/view-std-bus')
+def view_std_bus():
+    if session.get('username') == 'office':
+        students = db.student.find({"added_to_bus": 0}, {"name": 1, "email": 1, "register_number": 1, "semester": 1})
+        return render_template('office/view-std-bus.html', students=students)
+    else:
+        error = 'You need to log in as office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/college-office-login')
+
+
+#Route to add students to bus facilities
+@app.route('/add_bus/<register_number>', methods=['GET'])
+def add_to_bus(register_number):
+    if session.get('username') == 'office':
+        student = db.student.find_one({'register_number': register_number})
+        if student:
+            bus_record = {
+                'name': student['name'],
+                'email': student['email'],
+                'semester': student['semester'],
+                'branch': student['branch'],
+                'register_number': student['register_number'],
+                'qr_code': student['qr_code'],
+                'fee_paid': 0,
+                'route_name':'',
+                'fee_per_semester': 0
+            }
+            db.bus.insert_one(bus_record)
+            db.student.update_one({'register_number': register_number}, {'$set': {'added_to_bus': 1}})
+            flash('Student record added to office successfully')
+            return redirect('/view-std-bus')
+        else:
+            error = 'Student not found'
+            flash(error)
+            logging.warning(error)
+            return redirect('/view-std-bus')
+    else:
+        error = 'You need to log in as office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/college-office-login')
+
+
+#Route to view bus students
+@app.route('/reg_bus')
+def reg_bus():
+    if session.get('username') == 'office':
+        students = db.bus.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        return render_template('office/reg_bus.html', students=students)
+    else:
+        error = 'You need to log in as office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/college-office-login')
+
+
+#Route to view bus profile of students
+@app.route('/bus_profile/<string:register_number>')
+def bus_profile(register_number):
+    # Get student's record from the database
+    student = db.bus.find_one({'register_number': register_number})
+    
+    # Check if student exists
+    if not student:
+        flash('Student not found.')
+        logging.warning('Student not found.')
+        return redirect('/')
+ 
+    # Render the template with the student's information and book details
+    return render_template('office/bus_profile.html', student=student)
+
+
+#Route to update fee status of student
+@app.route('/update_infobus/<string:register_number>', methods=['POST'])
+def update_infobus(register_number):
+    fee_paid = request.form.get('fee_paid')
+    # Update the student information in your database or data structure
+    student = db.bus.find_one({'register_number': register_number})
+    db.bus.update_one({'register_number': register_number}, {'$set': {'fee_paid': fee_paid}})
+    return render_template('office/bus_profile.html', student=student)
+
+
+#Route to update route of bus
+@app.route('/update_bus_route/<register_number>', methods=['POST'])
+def update_bus_route(register_number):
+  # Update the route information in your database or data structure
+  route_name = request.form.get('route_name')
+  student = db.bus.find_one({"register_number": register_number})
+  if not student:
+    return "Student not found"
+    
+  route = db.routes.find_one({"route_name": route_name})
+  if not route:
+    return "Route not found"
+  
+  db.bus.update_one({"register_number": register_number}, {"$set": {"route_name": route_name, "fee_per_semester": route["fee_per_semester"]}})
+  db.bus.update_one({'register_number': register_number}, {'$set': {'fee_paid': '0'}})
+  
+  return render_template('office/bus_profile.html', student=student)
+
+
+#Route to delete a bus student 
+@app.route('/delete-std-bus/<register_number>', methods=['GET'])
+def delete_std_bus(register_number):
+    if session.get('username') == 'office':
+        student = db.bus.find_one({'register_number': register_number})
+        if student:
+            db.bus.delete_one({'register_number': register_number})
+            db.student.update_one({'register_number': register_number}, {'$set': {'added_to_bus': 0}})
+            flash('Student record deleted successfully')
+            return redirect('/reg_bus')
+        else:
+            error = 'Student record not found'
+            flash(error)
+            logging.warning(error)
+            return redirect('/reg_bus')
+    else:
+        error = 'You need to log in as librarian first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/librarian-login')
+
+
+#Route to open scanner
+@app.route('/qrbus')
+def qrbus():
+    return render_template('office/scan_qr_code.html')
+
+
+#Route to view bus profile of students after scanning
+@app.route('/bus_profile_qr', methods=['GET'])
+def bus_profile_qr():
+    # Get the QR code data from the URL parameters
+    data = request.args.get('data')
+    
+    # Split the data string into individual data elements
+    data_elements = data.split(',')
+    
+    # Extract the register number from the data
+    register_number = ''
+    for element in data_elements:
+        if 'Register Number:' in element:
+            register_number = element.split(': ')[1]
+            break
+    
+    # Find the document in the 'bus' collection with the matching register number
+    student = db.bus.find_one({'register_number': register_number})
+    
+    # If the student variable is None, render an error message
+    if student is None:
+        return render_template('office/invalid_qr.html')
+    
+    # Render a template that displays the document
+    return render_template('office/bus_profile_scaned.html', student=student)
 
 
 
@@ -271,7 +568,8 @@ def reg_lib():
 #----------------------------LOGOUT----------------------------#
 ################################################################
 
-    
+
+#Route to logout  
 @app.route('/logout')
 def logout():
     session.pop('username', None)
