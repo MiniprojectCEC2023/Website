@@ -15,7 +15,7 @@ import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
 
-mode='local'
+mode='cloud'
 
 if mode=='local':
     app = Flask(__name__)
