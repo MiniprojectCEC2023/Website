@@ -28,31 +28,58 @@
         <td>{{ student["semester"] }}</td>
       </tr>
       <tr>
-        <th>Books Available:</th>
-        <td>{{ student["max_book"] }}</td>
+        <th>Books Available To Borrow:</th>
+          <td>{{ student["max_book"] }}</td>
       </tr>
-      <tr>
+      <tr> 
+        {% for loan in book_loans %}
+          <tr>
+            <th>Name of book taken:</th>
+            <td>{{ loan["title"] }}</td>
+            <th>Due date:</th>
+            <td>{{ loan["return_date"] }}</td>
+          </tr>
+        {% endfor %}
+        
         <th>Update details:</th>
         <td> <button onclick="toggleTable()">Update</button> </td>
       </tr>     
     </table>
     <table id="myTable" style="display:none;">
-      <tr id="update_library_info">
-        <th>Update Library Information:</th>
+      <tr>
+        <th>Borrow Books:</th>
         <td>
           <ul>
             <li>
-              <form method="POST" action="/update_info/{{ student['register_number'] }}" id="update_form">
-                <label for="books_available">Books Available:</label>
-                <select id="books_available" name="books_available">
-                    <option value="0" {% if student['max_book'] == 0 %}selected{% endif %}>0</option>
-                    <option value="1" {% if student['max_book'] == 1 %}selected{% endif %}>1</option>
-                    <option value="2" {% if student['max_book'] == 2 %}selected{% endif %}>2</option>
-                    <option value="3" {% if student['max_book'] == 3 %}selected{% endif %}>3</option>
-                    <option value="4" {% if student['max_book'] == 4 %}selected{% endif %}>4</option>
-                </select>
-                <br>
-                <button type="submit">Update</button>
+            <form id="update_borrow" action="/borrow/{{ student['register_number'] }}" method="post">
+              <label for="title">Book title:</label>
+              <select id="title" name="title">
+                <option value="The Great Gatsby" {% if books["title"] == "The Great Gatsby" %}selected{% endif %}>The Great Gatsby</option>
+                <option value="Moby-Dick" {% if books["title"] == "Moby-Dick" %}selected{% endif %}>Moby-Dick</option>
+                <option value="Beloved" {% if books["title"] == "Beloved" %}selected{% endif %}>Beloved</option>
+              </select>
+              <br>
+              <input type="submit" value="Borrow">
+            </form>
+            
+            </li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <th>Return Books:</th>
+        <td>
+          <ul>
+            <li>
+            <form id="update_return" action="/return/{{ student['register_number'] }}" method="post">
+              <label for="title">Book title:</label>
+              <select id="title" name="title">
+                <option value="The Great Gatsby" {% if books["title"] == "The Great Gatsby" %}selected{% endif %}>The Great Gatsby</option>
+                <option value="Moby-Dick" {% if books["title"] == "Moby-Dick" %}selected{% endif %}>Moby-Dick</option>
+                <option value="Beloved" {% if books["title"] == "Beloved" %}selected{% endif %}>Beloved</option>
+              </select>
+              <br>
+              <input type="submit" value="Return">
             </form>
             
             </li>
@@ -61,23 +88,34 @@
       </tr>
     </table>
     <script>
-      const form = document.getElementById('update_form');
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const formData = new FormData(form);
-        fetch(form.action, {
-          method: form.method,
-          body: formData,
-        })
-          .then(response => {
-            if (response.ok) {
-              location.reload();
-            }
+      function handleSubmit(form) {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const formData = new FormData(form);
+          fetch(form.action, {
+            method: form.method,
+            body: formData,
           })
-          .catch(error => {
-            console.error(error);
-          });
-      });
+            .then(response => {
+              if (response.ok) {
+                location.reload();
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        });
+      }
+      
+      const updateRouteForm = document.getElementById('update_borrow');
+      handleSubmit(updateRouteForm);
+      
+      const updateBusInfoForm = document.getElementById('update_return');
+      handleSubmit(updateBusInfoForm);
+      
+
+
+
       function toggleTable() {
         var table = document.getElementById("myTable");
         if (table.style.display === "none") {
@@ -86,6 +124,7 @@
           table.style.display = "none";
         }
       }
+      
     </script>    
       </body>
     </html>

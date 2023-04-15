@@ -303,24 +303,63 @@ def lib_profile(register_number):
         flash('Student not found.')
         logging.warning('Student not found.')
         return redirect('/')
+
+      # Get all books that the student has borrowed
+    books = list(db.books.find())
+    book_loans = list(db.book_loans.find({'register_number': student['register_number']}))
     # Render the template with the student's information and book details
-    return render_template('librarian/lib_profile.html', student=student)
+    return render_template('librarian/lib_profile.html', student=student,books=books,book_loans=book_loans)
 
 
-#Route to upadate book availability of student
-@app.route('/update_info/<string:register_number>', methods=['POST'])
-def update_info(register_number):
-    books_available = request.form.get('books_available')
-    
-    # Update the student information in your database
-    student = db.library.find_one({'register_number': register_number})
-    if student:
-        db.library.update_one({'register_number': register_number}, {'$set': {'max_book': int(books_available)}})
-        student['max_book'] = int(books_available)
+import datetime
+@app.route('/borrow/<string:register_number>', methods=['POST'])
+def borrow(register_number):
+    # Get the student ID and book ID from the request data
+    title = request.form.get('title')
+    # Find the student and book in the respective collections
+    student = db.library.find_one({"register_number": register_number})
+    book = db.books.find_one({"title": title})
+
+
+    # If the student and book exist and the book has available copies, create a loan record
+    if student and book and book['copies_available'] > 0:
+        # Decrement the "copies_available" field for the book in the "books" collection
+        db.books.update_one({"title": title}, {"$inc": {"copies_available": -1}})
+
+        # Insert a loan record into the "book loans" collection with an automatically generated loan ID,
+        # the student ID, the book ID, the loan date (set to the current date), and the return date (set to 6 months from now)
+        db.book_loans.insert_one({
+            "loan_id": db.book_loans.count_documents({}) + 1,
+            "register_number": student['register_number'],
+            "title": book['title'],
+            "loan_date": datetime.datetime.utcnow(),
+            "return_date": datetime.datetime.utcnow() + datetime.timedelta(days=180)
+        })
+        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": -1}})
+        return "Book borrowed successfully!"
     else:
-        return render_template('error.html', message='Student not found.')
-    
-    return render_template('librarian/lib_profile.html', student=student)
+        return "Book not available for borrowing."
+
+
+@app.route('/return/<string:register_number>', methods=['POST'])
+def return_book(register_number):
+    # Get the book title from the request data
+    title = request.form.get('title')
+    # Find the student and book in the respective collections
+    student = db.library.find_one({"register_number": register_number})
+    book = db.books.find_one({"title": title})
+    loan = db.book_loans.find_one({"register_number": register_number, "title": title, "returned_date": None})
+
+    # If the student, book, and loan exist, update the loan record with the returned date and increment the "copies_available" field for the book in the "books" collection
+    if student and book and loan:
+        db.book_loans.delete_one({"_id": loan["_id"]})
+        db.books.update_one({"title": title}, {"$inc": {"copies_available": 1}})
+        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": 1}})
+        return "Book returned successfully!"
+    else:
+        return "Unable to return book. Please check the book title and ensure that the book is currently on loan."
+
+
 
 
 # Route to delete library profile
@@ -369,13 +408,14 @@ def lib_profile_qr():
     
     # Find the document in the 'library' collection with the matching register number
     student = db.library.find_one({'register_number': register_number})
-    
     # If the student variable is None, render an error message
     if student is None:
         return render_template('librarian/invalid_qr.html')
-    
+        
+    books = list(db.books.find())
+    book_loans = list(db.book_loans.find({'register_number': student['register_number']}))
     # Render a template that displays the document
-    return render_template('librarian/lib_profile_scaned.html', student=student)
+    return render_template('librarian/lib_profile_scaned.html', student=student,books=books,book_loans=book_loans)
 
 
 
