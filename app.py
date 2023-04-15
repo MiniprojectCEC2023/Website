@@ -262,7 +262,8 @@ def add_to_lib(register_number):
                 'branch': student['branch'],
                 'register_number': student['register_number'],
                 'qr_code': student['qr_code'],
-                'max_book': 4
+                'max_book': 4,
+                'books_taken':0
             }
             db.library.insert_one(library_record)
             db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 1}})
@@ -336,6 +337,7 @@ def borrow(register_number):
             "return_date": datetime.datetime.utcnow() + datetime.timedelta(days=180)
         })
         db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": -1}})
+        db.library.update_one({"register_number": register_number}, {"$inc": {"books_taken": 1}})
         return "Book borrowed successfully!"
     else:
         return "Book not available for borrowing."
@@ -355,6 +357,7 @@ def return_book(register_number):
         db.book_loans.delete_one({"_id": loan["_id"]})
         db.books.update_one({"title": title}, {"$inc": {"copies_available": 1}})
         db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": 1}})
+        db.library.update_one({"register_number": register_number}, {"$inc": {"books_taken": -1}})
         return "Book returned successfully!"
     else:
         return "Unable to return book. Please check the book title and ensure that the book is currently on loan."
@@ -368,9 +371,13 @@ def delete_std_lib(register_number):
     if session.get('username') == 'library':
         student = db.library.find_one({'register_number': register_number})
         if student:
-            db.library.delete_one({'register_number': register_number})
-            db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 0}})
-            flash('Student record deleted successfully')
+            books_taken = student.get('books_taken', 0)
+            if books_taken == 0:
+                db.library.delete_one({'register_number': register_number})
+                db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 0}})
+                flash('Student record deleted successfully')
+            else:
+                flash('Cannot delete student record as they have books taken from the library')
             return redirect('/reg_lib')
         else:
             error = 'Student record not found'
@@ -382,6 +389,7 @@ def delete_std_lib(register_number):
         flash(error)
         logging.warning(error)
         return redirect('/librarian-login')
+
 
 
 #Route to open scanner
