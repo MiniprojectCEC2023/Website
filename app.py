@@ -323,7 +323,7 @@ def borrow(register_number):
 
 
     # If the student and book exist and the book has available copies, create a loan record
-    if student and book and book['copies_available'] > 0:
+    if student and book and book['copies_available'] > 0 and student['max_book'] > 0:
         # Decrement the "copies_available" field for the book in the "books" collection
         db.books.update_one({"title": title}, {"$inc": {"copies_available": -1}})
 
@@ -336,8 +336,8 @@ def borrow(register_number):
             "loan_date": datetime.datetime.utcnow(),
             "return_date": datetime.datetime.utcnow() + datetime.timedelta(days=180)
         })
-        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": -1}})
         db.library.update_one({"register_number": register_number}, {"$inc": {"books_taken": 1}})
+        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": -1}})
         return "Book borrowed successfully!"
     else:
         return "Book not available for borrowing."
@@ -356,8 +356,8 @@ def return_book(register_number):
     if student and book and loan:
         db.book_loans.delete_one({"_id": loan["_id"]})
         db.books.update_one({"title": title}, {"$inc": {"copies_available": 1}})
-        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": 1}})
         db.library.update_one({"register_number": register_number}, {"$inc": {"books_taken": -1}})
+        db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": 1}})
         return "Book returned successfully!"
     else:
         return "Unable to return book. Please check the book title and ensure that the book is currently on loan."
