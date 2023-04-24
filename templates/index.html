@@ -1,22 +1,43 @@
-
+<!DOCTYPE html>
 <html>
 <head>
-	<title>Student Information System</title>
+  <title>Student Information System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
 
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="#">Home</a>
+    <h1>College Of Engineering Cherthala</h1>
+    <a href="/admin-login" class="admin-btn">Admin</a>
+    <a href="/librarian-login" class="library-btn">Library</a>
+    <a href="/college-office-login" class="office-btn">Office</a>
+    <a href="http://www.cectl.ac.in/" class="office-btn">About</a>
+  </div>
 
-	<div class="navbar">
-		<a href="#">Home</a>
-		<h1>College Of Engineering Cherthala</h1>
-		<a href="/admin-login" class="admin-btn">Admin</a>
-		<a href="/librarian-login" class="library-btn">Library</a>
-		<a href="/college-office-login" class="office-btn">Office</a>
-		<a href="http://www.cectl.ac.in/" class="office-btn">About</a>
-	</div>
-	<!-- Main content -->
+  <!-- Main content -->
+  <h1>Welcome to College of Engineering Cherthala</h1>
+  <div class="container">
+    <div class="card">
+      <h2>Admissions</h2>
+      <p>Learn more about the admission process at CEC and apply online.</p>
+      <a href="http://www.cectl.ac.in/">Apply Now</a>
+    </div>
+    <div class="card">
+      <h2>Programs</h2>
+      <p>Discover the undergraduate and postgraduate programs offered at CEC.</p>
+      <a href="http://www.cectl.ac.in/">View Programs</a>
+    </div>
+    <div class="card">
+      <h2>Facilities</h2>
+      <p>Explore the state-of-the-art facilities available at CEC.</p>
+      <a href="http://www.cectl.ac.in/">View Facilities</a>
+    </div>
+  </div>
 
+  <div class="footer">
+    <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+  </div>
 </body>
-
 </html>

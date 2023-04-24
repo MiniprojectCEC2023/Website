@@ -15,7 +15,7 @@ import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
 
-mode='cloud'
+mode='local'
 
 if mode=='local':
     app = Flask(__name__)
@@ -189,6 +189,7 @@ def delete_student(register_number):
             db.student.delete_one({'register_number': register_number})
             db.library.delete_many({'register_number': register_number})
             db.bus.delete_many({'register_number': register_number})
+            db.book_loans.delete_many({'register_number': register_number})
             flash('Student record deleted successfully')
         else:
             flash('Student record not found')
@@ -285,7 +286,7 @@ def add_to_lib(register_number):
 @app.route('/reg_lib')
 def reg_lib():
     if session.get('username') == 'library':
-        students = db.library.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        students = db.library.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1,'books_taken':1})
         return render_template('librarian/reg_lib.html', students=students)
     else:
         error = 'You need to log in as librarian first.'
@@ -512,7 +513,7 @@ def add_to_bus(register_number):
 @app.route('/reg_bus')
 def reg_bus():
     if session.get('username') == 'office':
-        students = db.bus.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        students = db.bus.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1, 'fee_paid': 1})
         return render_template('office/reg_bus.html', students=students)
     else:
         error = 'You need to log in as office first.'

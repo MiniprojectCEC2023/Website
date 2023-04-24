@@ -1,123 +1,177 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(45deg, #282828, #1c1c1c);
-  font-family: Arial, sans-serif;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-/* Floating navigation bar */
+/* Navbar */
 .navbar {
-  background-image: linear-gradient(45deg, #8a134a, #0b346e, #0a6f1e);
-  background-size: 400% 400%;
-  background-position: 0% 50%;
-  animation: gradient-shine 2s ease-in-out infinite;  
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 80px;
-  padding-top: 10px;
-}
-
-@keyframes gradient-shine {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ea5a5a;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  font-size: 20px;
 }
 
 .navbar a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
+  color: rgb(0, 0, 0);
   text-decoration: none;
-  font-size: 17px;
-  margin-top: 15px; /* add margin-top */
+  padding: 10px;
+  font-weight: bold;
 }
 
-
-
-.navbar a:hover {
-  text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff;
-}
-
-.navbar h1 {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  margin: 10px 0 0 16px;
-  padding: 14px 16px;
-  font-size: 24px;
-}
-
-.search-container {
-  float: left;
-  padding: 14px 16px;
-}
-
-.search-container input[type=text] {
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 17px;
+.admin-btn, .library-btn, .office-btn, .add-btn , .view-btn, .scan-btn, .logout-btn   {
+  background-color: #00000000;
   border: none;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-}
-
-.search-container button {
-  float: right;
-  padding: 6px 10px;
-  margin-top: 8px;
-  margin-right: 16px;
-  background-color: #333;
-  color: #f2f2f2;
-  font-size: 17px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Styles for Register and Home buttons */
-.register-btn, .home-btn {
-  float: right;
-  color: #f2f2f2;
+  color: rgb(0, 0, 0);
+  padding: 10px;
   text-align: center;
-  padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
-  background-color: #110760;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.register-btn:hover, .home-btn:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.content {
-  margin-top: 80px;
-  padding: 20px;
-}
-
-.content h2 {
-  margin-top: 0;
-  font-size: 28px;
-}
-
-.content p {
   font-size: 18px;
-  line-height: 1.5;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.admin-btn:hover, .library-btn:hover, .office-btn:hover, .add-btn:hover , .view-btn:hover, .scan-btn:hover, .logout-btn:hover   {
+  background-color: #02133a00;
+}
+
+/* Main content */
+body {
+  background-color: #042447;;
+  font-family: Arial, sans-serif;
+  background-size: cover;
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
+p {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.card {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: 20px;
+  text-align: center;
+  font-size: 16px;
+  padding: 20px;
+  border-radius: 5px;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 
+.card h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
+.card p {
+  margin-bottom: 10px;
+}
+
+.card a {
+  background-color: #000000;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.card a:hover {
+  background-color: #05421cca;
+}
+.footer {
+  background-color: #33333300;
+  color: white;
+  height: 100px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  /* Navbar */
+  .navbar {
+  flex-direction: column;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 16px;
+  }
+  
+  .navbar a {
+  padding: 5px;
+  font-size: 16px;
+  }
+  
+  .admin-btn, .library-btn, .office-btn, .add-btn , .view-btn, .scan-btn, .logout-btn {
+  font-size: 16px;
+  padding: 5px;
+  }
+  
+  /* Main content */
+  h1 {
+  font-size: 28px;
+  margin-top: 30px;
+  }
+  
+  p {
+  font-size: 16px;
+  margin-top: 20px;
+  }
+  
+  .container {
+  margin-top: 30px;
+  }
+  
+  .card {
+  max-width: 250px;
+  margin: 10px;
+  font-size: 14px;
+  padding: 15px;
+  }
+  
+  .card h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  }
+  
+  .card p {
+  margin-bottom: 8px;
+  }
+  
+  .card a {
+  font-size: 16px;
+  margin-top: 8px;
+  padding: 5px;
+  }
+  
+  /* Footer */
+  .footer {
+  height: 80px;
+  font-size: 14px;
+  }
+  }
+ 

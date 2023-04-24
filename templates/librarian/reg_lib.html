@@ -17,6 +17,7 @@
                     <th>Email</th>
                     <th>Register number</th>
                     <th>Semester</th>
+                    <th>Return status</th>
                     <th>View Profile</th>
                     <th>Delete Profile</th>
                 </tr>
@@ -28,6 +29,13 @@
                 <td>{{ student['email'] }}</td>
                 <td>{{ student['register_number'] }}</td>
                 <td>{{ student['semester'] }}</td>
+                <td>
+                     {% if student["books_taken"] == 0  %}
+                    <span style="color: green;">Returned</span>
+                    {% else %}
+                      <span style="color: red;">Not Returned</span>
+                  {% endif %}
+                </td>
                   <td>
                     <form action="/lib_profile/{{ student['register_number'] }}" method="GET">
                       <button type="submit" class="btn btn-primary"><i class="fas fa-user"></i> </button>
