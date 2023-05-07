@@ -2,11 +2,19 @@
 <html>
 <head>
     <title>Library Dashboard</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+	<style>
+		body{
+	  background-image: url("/static/images/library.jpg");
+	  background-repeat: no-repeat;
+	  background-size: cover;
+	}
+	  </style>
 </head>
 <body >
     <div class="navbar">
-		<a href="/logout">Home</a>
+		<a href="/logout" class="logout-btn"><i class="fas fa-home"></i></a>
 		<h1>Library</h1>
 		<a href="/view-std-lib" class="add-btn">Add Students</a>
 		<a href="/reg_lib" class="view-btn">View-student</a>

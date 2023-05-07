@@ -100,14 +100,12 @@ def register():
         gender = request.form.get("gender")
         branch = request.form.get("branch")
         semester = request.form.get("semester")
-
         # Check if all required fields are filled
         if not name or not email or not register_number or not phone or not address or not dob or not gender or not branch or not semester:
             error = 'All fields are required'
             flash(error)
             logging.warning(error)
             return render_template('admin/register.html')
-
         # Check if email or register number already exists
         result = db.student.find_one({'$or': [{'email': email}, {'register_number': register_number}]})
         if result:
@@ -115,22 +113,18 @@ def register():
             flash(error)
             logging.warning(error)
             return render_template('admin/register.html')
-
         # Generate the QR code
         data = f"Name: {name}, Email: {email}, Register Number: {register_number}"
         qr = qrcode.make(data)
         img = BytesIO()
         qr.save(img, "PNG")
         img.seek(0)
-
         # Insert data and QR code image into the database
         db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()), 'added_to_library': 0, 'added_to_bus': 0})
-
         # Save QR code as PNG image in specified folder
         qr_img_path = f"static/qr_codes/{register_number}.png"
         with open(qr_img_path, 'wb') as f:
             f.write(img.getbuffer())
-
         flash('Registration successful. Please log in.')
         return redirect('/register-success')
     else:
@@ -305,7 +299,6 @@ def lib_profile(register_number):
         flash('Student not found.')
         logging.warning('Student not found.')
         return redirect('/')
-
       # Get all books that the student has borrowed
     books = list(db.books.find())
     book_loans = list(db.book_loans.find({'register_number': student['register_number']}))
@@ -321,13 +314,10 @@ def borrow(register_number):
     # Find the student and book in the respective collections
     student = db.library.find_one({"register_number": register_number})
     book = db.books.find_one({"title": title})
-
-
     # If the student and book exist and the book has available copies, create a loan record
     if student and book and book['copies_available'] > 0 and student['max_book'] > 0:
         # Decrement the "copies_available" field for the book in the "books" collection
         db.books.update_one({"title": title}, {"$inc": {"copies_available": -1}})
-
         # Insert a loan record into the "book loans" collection with an automatically generated loan ID,
         # the student ID, the book ID, the loan date (set to the current date), and the return date (set to 6 months from now)
         db.book_loans.insert_one({
@@ -352,7 +342,6 @@ def return_book(register_number):
     student = db.library.find_one({"register_number": register_number})
     book = db.books.find_one({"title": title})
     loan = db.book_loans.find_one({"register_number": register_number, "title": title, "returned_date": None})
-
     # If the student, book, and loan exist, update the loan record with the returned date and increment the "copies_available" field for the book in the "books" collection
     if student and book and loan:
         db.book_loans.delete_one({"_id": loan["_id"]})
@@ -404,23 +393,19 @@ def qrlib():
 def lib_profile_qr():
     # Get the QR code data from the URL parameters
     data = request.args.get('data')
-    
     # Split the data string into individual data elements
     data_elements = data.split(',')
-    
     # Extract the register number from the data
     register_number = ''
     for element in data_elements:
         if 'Register Number:' in element:
             register_number = element.split(': ')[1]
             break
-    
     # Find the document in the 'library' collection with the matching register number
     student = db.library.find_one({'register_number': register_number})
     # If the student variable is None, render an error message
     if student is None:
-        return render_template('librarian/invalid_qr.html')
-        
+        return render_template('librarian/invalid_qr.html')  
     books = list(db.books.find())
     book_loans = list(db.book_loans.find({'register_number': student['register_number']}))
     # Render a template that displays the document
@@ -527,13 +512,11 @@ def reg_bus():
 def bus_profile(register_number):
     # Get student's record from the database
     student = db.bus.find_one({'register_number': register_number})
-    
     # Check if student exists
     if not student:
         flash('Student not found.')
         logging.warning('Student not found.')
         return redirect('/')
- 
     # Render the template with the student's information and book details
     return render_template('office/bus_profile.html', student=student)
 
@@ -555,15 +538,12 @@ def update_bus_route(register_number):
   route_name = request.form.get('route_name')
   student = db.bus.find_one({"register_number": register_number})
   if not student:
-    return "Student not found"
-    
+    return "Student not found" 
   route = db.routes.find_one({"route_name": route_name})
   if not route:
     return "Route not found"
-  
   db.bus.update_one({"register_number": register_number}, {"$set": {"route_name": route_name, "fee_per_semester": route["fee_per_semester"]}})
   db.bus.update_one({'register_number': register_number}, {'$set': {'fee_paid': '0'}})
-  
   return render_template('office/bus_profile.html', student=student)
 
 
@@ -587,8 +567,6 @@ def delete_std_bus(register_number):
         flash(error)
         logging.warning(error)
         return redirect('/librarian-login')
-
-
 #Route to open scanner
 @app.route('/qrbus')
 def qrbus():
@@ -600,24 +578,19 @@ def qrbus():
 def bus_profile_qr():
     # Get the QR code data from the URL parameters
     data = request.args.get('data')
-    
     # Split the data string into individual data elements
     data_elements = data.split(',')
-    
     # Extract the register number from the data
     register_number = ''
     for element in data_elements:
         if 'Register Number:' in element:
             register_number = element.split(': ')[1]
             break
-    
     # Find the document in the 'bus' collection with the matching register number
     student = db.bus.find_one({'register_number': register_number})
-    
     # If the student variable is None, render an error message
     if student is None:
         return render_template('office/invalid_qr.html')
-    
     # Render a template that displays the document
     return render_template('office/bus_profile_scaned.html', student=student)
 

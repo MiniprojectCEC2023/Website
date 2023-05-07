@@ -2,12 +2,20 @@
 <html>
 <head>
     <title>Admin Dashboard</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+	<style>
+		body{
+	  background-image: url("/static/images/admin.jpg");
+	  background-repeat: no-repeat;
+	  background-size: cover;
+	}
+	  </style>
 </head>
 	<body style="background-color: #282828;">
 
     <div class="navbar">
-		<a href="/logout">Home</a>
+		<a href="/logout" class="logout-btn"><i class="fas fa-home"></i></a>
 		<h1>Admin_Panel</h1>
 		<a href="/register" class="logout-btn">Register</a>
 		<a href="/view-students" class="view-btn">View-student</a>

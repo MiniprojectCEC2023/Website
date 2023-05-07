@@ -1,57 +1,64 @@
-  body {
-            background-color: #282828;
-            font-family: Arial, sans-serif;
-            color: #333;
-            background-repeat: no-repeat;
-            background-size: cover;
-          }
-          form {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 2rem;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-          }
-          
+body {
+  background: linear-gradient(to bottom right, #1e5799, #2989d8, #7db9e8);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
           h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #ffffff;
+            margin-top: 50px;
+            font-size: 3rem;
+            letter-spacing: 0.2rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
           }
-          
+      
+          form {
+            display: inline-block;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease-out;
+          }
+      
+          form:hover {
+            transform: scale(1.1);
+          }
+      
           label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 10px;
             font-size: 1.2rem;
-            color: #666666;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
           }
-          
-          input[type="text"],
-          input[type="password"] {
+      
+          input[type="text"], input[type="password"] {
             display: block;
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            border: 2px solid #cccccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-          }
-          
-          input[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 0.5rem;
-            background-color: #3366cc;
-            color: #ffffff;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
             border: none;
-            border-radius: 3px;
             font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+          }
+      
+          input[type="submit"] {
+            background: #29b6f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
             cursor: pointer;
+            transition: background 0.3s ease-out;
           }
-          
+      
           input[type="submit"]:hover {
-            background-color: #254e7f;
+            background: #03a9f4;
           }
-          
