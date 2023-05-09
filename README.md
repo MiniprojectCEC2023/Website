@@ -1,4 +1,4 @@
-My Website
+#College
 Welcome to my website! This is where I showcase my work and share my thoughts on various topics.
 
 Table of Contents
