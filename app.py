@@ -15,7 +15,7 @@ import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
 
-mode='local'
+mode='cloud'
 
 if mode=='local':
     app = Flask(__name__)
@@ -474,9 +474,9 @@ def add_to_bus(register_number):
                 'branch': student['branch'],
                 'register_number': student['register_number'],
                 'qr_code': student['qr_code'],
-                'fee_paid': 0,
-                'route_name':'',
-                'fee_per_semester': 0
+                'fee_paid': "0",
+                'route_name':'Route A',
+                'fee_per_semester': 1500
             }
             db.bus.insert_one(bus_record)
             db.student.update_one({'register_number': register_number}, {'$set': {'added_to_bus': 1}})
