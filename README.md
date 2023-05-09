@@ -1,4 +1,4 @@
-# Wbsite
+# Website
 
 A new Python project.
 
