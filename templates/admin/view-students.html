@@ -17,8 +17,9 @@
                     <th>Email</th>
                     <th>Register number</th>
                     <th>Semester</th>
+                    <th>Download QR</th>
                     <th>Edit</th>
-                    <th>Delete</th>
+                    <th>Delete</th>  <!-- New column for QR code download option -->
                 </tr>
             </thead>
             <tbody>
@@ -28,16 +29,18 @@
                     <td>{{ student['email'] }}</td>
                     <td>{{ student['register_number'] }}</td>
                     <td>{{ student['semester'] }}</td>
+                    <td>
+                        <a href="/download-qr/{{ student['register_number'] }}" class="download-btn"><i class="fas fa-download"></i></a>
+                    </td>
                     <td><a href="/edit-student/{{ student['register_number'] }}" class="edit-btn"><i class="fas fa-edit"></i></a></td>
                     <td>
                         <form action="/delete-student/{{ student['register_number'] }}" method="GET">
                             <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
+                   
                 </tr>
-              {% endfor %}
-              
-          
+                {% endfor %}
             </tbody>
         </table>
     {% else %}
@@ -45,4 +48,3 @@
     {% endif %}
 </body>
 </html>
-

@@ -14,7 +14,8 @@ from typing import List, Tuple
 import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
-
+import io
+from flask import send_file, abort
 mode='cloud'
 
 if mode=='local':
@@ -122,9 +123,9 @@ def register():
         # Insert data and QR code image into the database
         db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()), 'added_to_library': 0, 'added_to_bus': 0})
         # Save QR code as PNG image in specified folder
-        qr_img_path = f"static/qr_codes/{register_number}.png"
-        with open(qr_img_path, 'wb') as f:
-            f.write(img.getbuffer())
+        """ img_io = io.BytesIO()
+        qr.save(img_io, "PNG")
+        img_io.seek(0) """
         flash('Registration successful. Please log in.')
         return redirect('/register-success')
     else:
@@ -194,6 +195,22 @@ def delete_student(register_number):
         logging.warning(error)
         return redirect('/admin-login')
 
+from flask import send_file, abort
+
+@app.route("/download-qr/<register_number>")
+def download_qr(register_number):
+    # Retrieve the QR code image from the database
+    result = db.student.find_one({'register_number': register_number})
+    if not result or 'qr_code' not in result:
+        abort(404)  # QR code not found or invalid
+
+    qr_code = result['qr_code']
+    return send_file(
+        io.BytesIO(qr_code),
+        mimetype='image/png',
+        as_attachment=True,
+        attachment_filename=f"{register_number}_qr_code.png"
+    )
 
 
 
