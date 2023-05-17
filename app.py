@@ -16,6 +16,9 @@ from waitress import serve
 from flask_pymongo import PyMongo
 import io
 from flask import send_file, abort
+import datetime
+from flask import request
+
 mode='cloud'
 
 if mode=='local':
@@ -323,7 +326,8 @@ def lib_profile(register_number):
     return render_template('librarian/lib_profile.html', student=student,books=books,book_loans=book_loans)
 
 
-import datetime
+
+
 @app.route('/borrow/<string:register_number>', methods=['POST'])
 def borrow(register_number):
     # Get the student ID and book ID from the request data
@@ -337,18 +341,23 @@ def borrow(register_number):
         db.books.update_one({"title": title}, {"$inc": {"copies_available": -1}})
         # Insert a loan record into the "book loans" collection with an automatically generated loan ID,
         # the student ID, the book ID, the loan date (set to the current date), and the return date (set to 6 months from now)
+        loan_date = datetime.datetime.utcnow().date()  # Get the current date
+        return_date = loan_date + datetime.timedelta(days=180)  # Add 6 months to the current date
         db.book_loans.insert_one({
             "loan_id": db.book_loans.count_documents({}) + 1,
             "register_number": student['register_number'],
             "title": book['title'],
-            "loan_date": datetime.datetime.utcnow(),
-            "return_date": datetime.datetime.utcnow() + datetime.timedelta(days=180)
+            "loan_date": loan_date.strftime('%d/%m/%Y'),  # Format the loan_date as 'dd/mm/yyyy'
+            "return_date": return_date.strftime('%d/%m/%Y')  # Format the return_date as 'dd/mm/yyyy'
         })
         db.library.update_one({"register_number": register_number}, {"$inc": {"books_taken": 1}})
         db.library.update_one({"register_number": register_number}, {"$inc": {"max_book": -1}})
         return "Book borrowed successfully!"
     else:
         return "Book not available for borrowing."
+
+
+
 
 
 @app.route('/return/<string:register_number>', methods=['POST'])
@@ -625,7 +634,7 @@ def logout():
     return redirect('/')
 
     
-mode='dev'
+mode='pro'
 if __name__ == '__main__':
     if mode=='dev':
          app.run(host='0.0.0.0', port=5000,debug=True)
