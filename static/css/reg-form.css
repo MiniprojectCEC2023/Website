@@ -1,103 +1,143 @@
-/* Global styles */
+/* Set default font family and size */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  background-color: #f2f2f2;
+  color: #142d34;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-* {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-  }
-  
-  h1 {
+/* Style the page title */
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
+/* Form styles */
+.reg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px); /* Subtract the height of navbar and footer from viewport height */
+  overflow-y: auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+form {
+  width: 80%;
+  max-width: 500px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #4da6ff;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #4ca6af;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #0ed5e7;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.navbar a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 10px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.navbar a:hover {
+  background-color: #ffffff;
+  color: #142d34;
+}
+
+/* Footer */
+.footer {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 4px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Media queries and other styles */
+
+@media (max-width: 768px) {
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
     text-align: center;
-    font-weight: bold;
-    margin-top: 50px;
-  }
-  
-  /* Form styles */
-  
-  .reg {
-    max-width: 500px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
-    padding: 40px;
-    margin-top: 50px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
+    padding: 10px 0;
     font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
   }
-  
-  .form-control {
-    width: 100%;
-    padding: 10px;
+
+  .navbar a {
+    padding: 5px;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    transition: border-color 0.2s ease-in-out;
   }
-  
-  .form-control:focus {
-    outline: none;
-    border-color: #4da6ff;
+
+  /* Footer */
+  .footer {
+    height: 80px;
+    font-size: 14px;
   }
-  
-  .form-check {
-    margin-bottom: 20px;
-  }
-  
-  .form-check label {
-    font-size: 16px;
-    font-weight: normal;
-    margin-left: 10px;
-  }
-  
-  .form-check-inline {
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  select.form-control {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23808080'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat;
-    background-position: calc(100% - 10px) center;
-    background-size: 10px;
-    padding-right: 30px;
-  }
-  
-  select.form-control:focus {
-    border-color: #4da6ff;
-  }
-  
-  .btn {
-    display: inline-block;
-    background-color: #4da6ff;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .btn:hover {
-    background-color: #3d94e6;
-  }
-  
+}

@@ -3,11 +3,18 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+  
     <title>View Students</title>
 </head>
 <body>
-    <h1>Registered Students</h1>
-    <a href="/admin-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+    <!-- <h1>Registered Students</h1>
+    <a href="/admin-dashboard" class="logout-btn"><i class="fas fa-home"></i></a> -->
+
+    <div class="navbar">
+        <a href="/admin-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+        <h1>Registered Students</h1>
+    
+      </div>
 
     {% if students %}
         <table>
@@ -19,7 +26,7 @@
                     <th>Semester</th>
                     <th>Download QR</th>
                     <th>Edit</th>
-                    <th>Delete</th>  <!-- New column for QR code download option -->
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +45,6 @@
                             <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
-                   
                 </tr>
                 {% endfor %}
             </tbody>
@@ -46,5 +52,9 @@
     {% else %}
         <p>No students found.</p>
     {% endif %}
+
+    <div class="footer">
+        <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+      </div>
 </body>
 </html>

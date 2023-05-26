@@ -1,38 +1,19 @@
-/* Apply a reset to remove default styles */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* Set a background color for the page */
 
 body {
-  background-color: #f2f2f2;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   font-size: 16px;
+  background-color: #f2f2f2;
+  color: #142d34;
 }
 
-/* Center the title */
-
+/* Style the page title */
 h1 {
   text-align: center;
-  margin: 20px 0;
-  color: rgb(0, 102, 204);
+  font-size: 36px;
+  margin-top: 50px;
 }
 a:hover .fa-home {
-    color: rgb(0, 102, 204);
-}
-/* Style the logout button */
-
-.logout-btn {
-  display: inline-block;
-  float: right;
-  font-size: 24px;
-  color: #555;
-  text-decoration: none;
-  margin: 20px;
+    color: #142d34;
 }
 #scan-btn {
   position: fixed;
@@ -43,24 +24,27 @@ a:hover .fa-home {
   align-items: center;
   width: 50px;
   height: 50px;
-  background-color: #fff;
+  background-color: #142d34;
+  color: rgb(255, 255, 255);
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0,0,0,.1);
   transition: all .2s ease;
   z-index: 9999;
-  font-size: 24px; /* set the font size to 24px */
+  font-size: 24px; 
 }
 
 
 #scan-btn:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0,0,0,.2);
+  background-color: #fff;
+  color: #142d34;
 }
 
 /* Style the table */
 
 table {
-  margin: 0 auto;
+  margin: 20px auto;
   border-collapse: collapse;
   width: 80%;
   max-width: 800px;
@@ -72,10 +56,11 @@ table {
 /* Style the table headers */
 
 th {
-  background-color: #f2f2f2;
+  background-color: #142d34;
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ccc;
+  color: #fff;
 }
 
 /* Style the table cells */
@@ -89,7 +74,7 @@ td {
 /* Style the update button */
 
 button {
-    background-color: #4CAF50;
+    background-color: #4ca6af;
     border: none;
     color: white;
     padding: 8px 16px;
@@ -103,8 +88,8 @@ button {
   }
   
   button:hover {
-    background-color: #388e3c;
-    border-color: #388e3c;
+    background-color: #0ed5e7;
+    border-color: #0ed5e7;
   }
   
   
@@ -138,7 +123,7 @@ button {
 }
 
 #myTable input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #4ca6af;
     border: none;
     color: white;
     padding: 8px 16px;
@@ -152,8 +137,8 @@ button {
   }
   
   #myTable input[type="submit"]:hover {
-    background-color: #388e3c;
-    border-color: #388e3c;
+    background-color: #0ed5e7;
+    border-color: #0ed5e7;
   }
   
 /* Style the colors of the fee status */
@@ -168,4 +153,63 @@ span[style="color: green;"] {
 
 span[style="color: red;"] {
   color: red;
+}
+.navbar {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.navbar a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 10px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.navbar a:hover {
+  background-color: #ffffff;
+  color: #142d34;
+}
+.footer {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 4px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+  }
+
+  .navbar a {
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  /* Footer */
+  .footer {
+    height: 80px;
+    font-size: 14px;
+  }
+}
+#myTableContainer {
+  margin: 20px auto;
+  max-height: 400px; /* Set a maximum height for the table container */
+  overflow-y: auto; /* Add vertical scrollbars when the content exceeds the container height */
+}
+
+#myTable {
+  width: 100%;
 }

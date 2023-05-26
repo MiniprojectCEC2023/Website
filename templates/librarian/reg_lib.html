@@ -6,8 +6,15 @@
     <title>View Library Students</title>
 </head>
 <body>
-    <h1>Library Students</h1>
-    <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+<!--     <h1>Library Students</h1>
+    <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a> -->
+
+    
+    <div class="navbar">
+      <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+      <h1>Library Students</h1>
+  
+    </div>
 
     {% if students %}
         <table>
@@ -54,6 +61,9 @@
     {% else %}
         <p>No students found.</p>
     {% endif %}
+    <div class="footer">
+      <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+    </div>
 </body>
 </html>
 

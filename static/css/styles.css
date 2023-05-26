@@ -1,43 +1,29 @@
+/* Alternate CSS */
+
 /* Navbar */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #42256870;
-  color: #142d34;
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
 }
 
 .navbar a {
-  color:aliceblue;
+  color: #ffffff;
   text-decoration: none;
-  font-weight: bold;
-  padding: 10px;
-  margin: 0 10px;
-  border-radius: 5px;
+  margin-right: 10px;
+  padding: 8px;
+  border-radius: 4px;
 }
 
-.admin-btn, .library-btn, .office-btn, .add-btn , .view-btn, .scan-btn, .logout-btn {
-  background-color: #142d34;
-  border: none;
-  color: rgba(12, 86, 126, 0.549);
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.admin-btn:hover, .library-btn:hover, .office-btn:hover, .add-btn:hover , .view-btn:hover, .scan-btn:hover, .logout-btn:hover {
-  background-color: #42256870;
+.navbar a:hover {
+  background-color: #ffffff;
+  color: #142d34;
 }
 
 /* Main content */
 body {
-  background-color: #142d34;
+  background-color: #f0f0f0;
   font-family: Arial, sans-serif;
-
 }
 
 h1 {
@@ -51,9 +37,6 @@ p {
   font-size: 20px;
   margin-top: 30px;
 }
-a:hover .fa-home {
-  background-color: #142f37;
-}
 
 .container {
   display: flex;
@@ -63,8 +46,8 @@ a:hover .fa-home {
 }
 
 .card {
-  background-color: #42256870;
-  box-shadow: 0 4px 8px 0 #42256870;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   max-width: 300px;
   margin: 20px;
   text-align: center;
@@ -76,19 +59,19 @@ a:hover .fa-home {
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px 0 #42256870;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .card h2 {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: aliceblue;
+  color: #142d34;
 }
 
 .card p {
   margin-bottom: 10px;
-  color: aliceblue;
+  color: #142d34;
 }
 
 .card a {
@@ -106,80 +89,77 @@ a:hover .fa-home {
 }
 
 .card a:hover {
-  background-color: #42256870;
+  background-color: #ffffff;
+  color: #142d34;
 }
 
 .footer {
-  background-color:#42256870;
-  color: #142d34;
-  height: 100px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  background-color: #142d34;
+  color: #ffffff;
   padding: 10px;
   box-sizing: border-box;
   text-align: center;
+  margin-top: auto;
+  padding-top: 4px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
+
 @media (max-width: 768px) {
   /* Navbar */
   .navbar {
-  flex-direction: column;
-  text-align: center;
-  padding: 10px 0;
-  font-size: 16px;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
   }
-  
+
   .navbar a {
-  padding: 5px;
-  font-size: 16px;
+    padding: 5px;
+    font-size: 16px;
   }
-  
-  .admin-btn, .library-btn, .office-btn, .add-btn , .view-btn, .scan-btn, .logout-btn {
-  font-size: 16px;
-  padding: 5px;
-  }
-  
+
   /* Main content */
   h1 {
-  font-size: 28px;
-  margin-top: 30px;
+    font-size: 28px;
+    margin-top: 30px;
   }
-  
+
   p {
-  font-size: 16px;
-  margin-top: 20px;
+    font-size: 16px;
+    margin-top: 20px;
   }
-  
+
   .container {
-  margin-top: 30px;
+    margin-top: 30px;
   }
-  
+
   .card {
-  max-width: 250px;
-  margin: 10px;
-  font-size: 14px;
-  padding: 15px;
+    max-width: 250px;
+    margin: 10px;
+    font-size: 14px;
+    padding: 15px;
   }
-  
+
   .card h2 {
-  font-size: 20px;
-  margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 8px;
   }
-  
+
   .card p {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
   }
-  
+
   .card a {
-  font-size: 16px;
-  margin-top: 8px;
-  padding: 5px;
+    font-size: 16px;
+    margin-top: 8px;
+    padding: 5px;
   }
-  
+
   /* Footer */
   .footer {
-  height: 80px;
-  font-size: 14px;
+    height: 80px;
+    font-size: 14px;
   }
-  }
- 
+}

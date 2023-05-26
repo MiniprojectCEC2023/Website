@@ -1,103 +1,154 @@
 /* Set default font family and size */
 body {
-    font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  background-color: #f2f2f2;
+  color: #142d34;
+}
+
+/* Style the page title */
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
+/* Style the table */
+table {
+  margin: 50px auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+/* Style the table headers */
+thead th {
+  background-color: #142d34;
+  color: #fff;
+  text-align: left;
+  padding: 10px;
+}
+
+/* Style the table rows */
+tbody tr {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Style the table data cells */
+td {
+  padding: 10px;
+}
+
+.download-btn {
+  background-color: #f2f2f2; /* Replace with your desired color value */
+  color: #070606; /* Text color */
+  padding: 8px 16px; /* Adjust padding as needed */
+  /* Additional styles */
+}
+.edit-btn {
+  background-color: #f2f2f2; /* Replace with your desired color value */
+  color: #070606; /* Text color */
+  padding: 8px 16px; /* Adjust padding as needed */
+  /* Additional styles */
+}
+
+/* Style the hover effects for icons and buttons */
+a:hover .fa-edit {
+  color: #00aaff;
+}
+
+a:hover .fa-download {
+  color: #0ad640;
+}
+
+a:hover .fa-home {
+  color: #142d34;
+}
+
+button:hover .fa-trash-alt {
+  color: #ff5555;
+}
+
+button:hover .fa-user {
+  color: #19bbe3;
+}
+
+button:hover .fa-plus {
+  color: #00ff04;
+}
+
+form {
+  display: inline-block;
+}
+
+.table-container {
+  margin: 20px auto;
+  max-height: calc(100vh - 250px); /* Adjust the value as needed */
+  overflow-y: auto;
+}
+
+/* Rest of the styles... */
+
+
+
+button {
+  background-color: #f2f2f2;
+  color: #333;
+  border: none;
+  border-radius: 3px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.navbar {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.navbar a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  position: fixed;
+}
+
+.navbar a:hover {
+  background-color: #ffffff;
+  color: #142d34;
+}
+/* Footer */
+.footer {
+  background-color: #142d34;
+  color: #ffffff;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: auto;
+  padding-top: 4px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Navbar */
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
     font-size: 16px;
   }
-  
-  /* Style the page title */
-  h1 {
-    margin-top: 50px;
-    text-align: center;
-    font-size: 36px;
-  }
-  
-  /* Style the logout button */
-  .logout-btn {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  /* Style the table */
-  table {
-    margin: 50px auto;
-    border-collapse: collapse;
-    width: 80%;
-  }
-  
-  /* Style the table headers */
-  thead th {
-    background-color: #110760;
-    color: #fff;
-    text-align: left;
-    padding: 10px;
-  }
-  
-  /* Style the table rows */
-  tbody tr {
-    border-bottom: 1px solid #ccc;
-  }
-  
-  /* Style the table data cells */
-  td {
-    padding: 10px;
-  }
-  a:hover .fa-edit {
-    color: rgb(0, 128, 0);
-  }
-  a:hover .fa-home {
-    color: rgb(0, 102, 204);
-  }
-  button:hover .fa-trash-alt {
-    color: rgb(255, 0, 0);
-  }
-  button:hover .fa-user {
-    color: rgb(0, 102, 204);
-  }
-  button:hover .fa-plus {
-    color: rgb(0, 128, 0);
-  }
-  
 
-  
-  
-  /* Style the Edit and Delete icons */
-  i.fas {
-    font-size: 20px;
-    color: #000000;
-    cursor: pointer;
-    margin-right: 10px;
+  .navbar a {
+    padding: 5px;
+    font-size: 16px;
   }
-  
-  /* Style the Delete button */
-  .btn-danger {
-    background-color: #00000000;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
 
-  form {
-    display: inline-block;
+  /* Footer */
+  .footer {
+    height: 80px;
+    font-size: 14px;
   }
-  
-  button {
-    background-color: #00000000;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
- 
-  
+}

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block content %}
@@ -11,11 +12,12 @@
       <option value="3rd" {% if student.semester == "3rd" %}selected{% endif %}>3rd</option>
       <option value="4th" {% if student.semester == "4th" %}selected{% endif %}>4th</option>
       <option value="5th" {% if student.semester == "5th" %}selected{% endif %}>5th</option>
-      <option value="6th" {% if student.semester == "6th "%}selected{% endif %}>6th</option>
+      <option value="6th" {% if student.semester == "6th" %}selected{% endif %}>6th</option>
       <option value="7th" {% if student.semester == "7th" %}selected{% endif %}>7th</option>
       <option value="8th" {% if student.semester == "8th" %}selected{% endif %}>8th</option>
     </select>
   </div>
   <input type="submit" class="btn btn-primary" value="Update">
 </form>
+
 {% endblock %}

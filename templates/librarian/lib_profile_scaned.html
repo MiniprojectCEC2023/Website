@@ -6,10 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
   </head>
   <body>
-    <h1>Student Information</h1>
-    <a href="/qrlib" id="scan-btn"><i class="fas fa-qrcode"></i></a>
-    
-    <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+
+    <div class="navbar">
+      <a href="/qrlib" id="scan-btn"><i class="fas fa-qrcode"></i></a>
+      <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+      <h1>Student Information</h1>
+    </div>
+    <div id="myTableContainer">
     <table>
       <tr>
         <th>Name:</th>
@@ -87,6 +90,10 @@
         </td>
       </tr>
     </table>
+  </div>
+    <div class="footer">
+      <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+    </div>
     <script>
       function handleSubmit(form) {
         form.addEventListener('submit', (event) => {

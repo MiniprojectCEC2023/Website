@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/reg-form.css') }}">
 	<title>Student Registration Form</title>
 </head>
 <body>
 
-	<h1>Student Registration Form</h1>
-
+	<div class="navbar">
+		<a href="/admin-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+		<h1>Student Registration Form</h1>
+	  </div>
 <div class="reg">
 	<form action="/register-success" method="POST">
 		<div class="form-group">
@@ -74,5 +77,8 @@
 	  </form>
 	  
 </div>
+<div class="footer">
+	<p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+  </div>
 </body>
 </html>
