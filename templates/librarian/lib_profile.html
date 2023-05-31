@@ -56,16 +56,18 @@
         <td>
           <ul>
             <li>
-            <form id="update_borrow" action="/borrow/{{ student['register_number'] }}" method="post">
-              <label for="title">Book title:</label>
-              <select id="title" name="title">
-                <option value="The Great Gatsby" {% if books["title"] == "The Great Gatsby" %}selected{% endif %}>The Great Gatsby</option>
-                <option value="Moby-Dick" {% if books["title"] == "Moby-Dick" %}selected{% endif %}>Moby-Dick</option>
-                <option value="Beloved" {% if books["title"] == "Beloved" %}selected{% endif %}>Beloved</option>
-              </select>
-              <br>
-              <input type="submit" value="Borrow">
-            </form>
+              <form id="update_borrow" action="/borrow/{{ student['register_number'] }}" method="post">
+                <label for="title">Book title:</label>
+                <select id="title" name="title">
+                  {% for book in books %}
+                    <option value="{{ book['title'] }}" {% if books["title"] == book['title'] %}selected{% endif %}>{{ book['title'] }}</option>
+                  {% endfor %}
+                </select>
+                <br>
+                <input type="submit" value="Borrow">
+              </form>
+              
+              
             
             </li>
           </ul>
@@ -77,12 +79,11 @@
           <ul>
             <li>
             <form id="update_return" action="/return/{{ student['register_number'] }}" method="post">
-              <label for="title">Book title:</label>
-              <select id="title" name="title">
-                <option value="The Great Gatsby" {% if books["title"] == "The Great Gatsby" %}selected{% endif %}>The Great Gatsby</option>
-                <option value="Moby-Dick" {% if books["title"] == "Moby-Dick" %}selected{% endif %}>Moby-Dick</option>
-                <option value="Beloved" {% if books["title"] == "Beloved" %}selected{% endif %}>Beloved</option>
-              </select>
+              <label for="titles">Book title:</label>
+              <select id="titles" name="titles">
+                {% for book in book_loans %}
+                <option value="{{ book['title'] }}" {% if books["title"] == book['title'] %}selected{% endif %}>{{ book['title'] }}</option>
+              {% endfor %}
               <br>
               <input type="submit" value="Return">
             </form>

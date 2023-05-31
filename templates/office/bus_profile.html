@@ -65,15 +65,9 @@
           <form id="update-route-form" action="/update_bus_route/{{ student['register_number'] }}" method="post">
           <label for="route_name">Select a Route:</label>
           <select id="route_name" name="route_name">
-            <option value="Route A" {% if student[6] == "Route A" %}selected{% endif %}>Route A</option>
-            <option value="Route B" {% if student[6] == "Route B" %}selected{% endif %}>Route B</option>
-            <option value="Route C" {% if student[6] == "Route C" %}selected{% endif %}>Route C</option>
-            <option value="Route E" {% if student[6] == "Route E" %}selected{% endif %}>Route E</option>
-            <option value="Route F" {% if student[6] == "Route F" %}selected{% endif %}>Route F</option>
-            <option value="Route G" {% if student[6] == "Route G" %}selected{% endif %}>Route G</option>
-            <option value="Route H" {% if student[6] == "Route H" %}selected{% endif %}>Route H</option>
-            <option value="Route I" {% if student[6] == "Route I" %}selected{% endif %}>Route I</option>
-            <option value="Route J" {% if student[6] == "Route J" %}selected{% endif %}>Route J</option>
+            {% for route in routes %}
+            <option value="{{ route['route_name'] }}" {% if routes["route_name"] == route['route_name'] %}selected{% endif %}>{{ route['route_name'] }}</option>
+          {% endfor %}
           </select>
           <br>
           <input type="submit" value="Update Route">

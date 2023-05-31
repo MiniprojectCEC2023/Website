@@ -363,7 +363,7 @@ def borrow(register_number):
 @app.route('/return/<string:register_number>', methods=['POST'])
 def return_book(register_number):
     # Get the book title from the request data
-    title = request.form.get('title')
+    title = request.form.get('titles')
     # Find the student and book in the respective collections
     student = db.library.find_one({"register_number": register_number})
     book = db.books.find_one({"title": title})
@@ -538,13 +538,14 @@ def reg_bus():
 def bus_profile(register_number):
     # Get student's record from the database
     student = db.bus.find_one({'register_number': register_number})
+    routes = list(db.routes.find())
     # Check if student exists
     if not student:
         flash('Student not found.')
         logging.warning('Student not found.')
         return redirect('/')
     # Render the template with the student's information and book details
-    return render_template('office/bus_profile.html', student=student)
+    return render_template('office/bus_profile.html', student=student,routes=routes)
 
 
 #Route to update fee status of student
@@ -614,11 +615,12 @@ def bus_profile_qr():
             break
     # Find the document in the 'bus' collection with the matching register number
     student = db.bus.find_one({'register_number': register_number})
+    routes = list(db.routes.find())
     # If the student variable is None, render an error message
     if student is None:
         return render_template('office/invalid_qr.html')
     # Render a template that displays the document
-    return render_template('office/bus_profile_scaned.html', student=student)
+    return render_template('office/bus_profile_scaned.html', student=student,routes=routes)
 
 
 
