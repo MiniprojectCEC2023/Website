@@ -37,7 +37,8 @@
         <tr>
           <tr>
             <th>Fare:</th>
-            <td>{{ student["fee_per_semester"]}}</td>
+            <td>₹{{ student["fee_per_semester"] }}</td>
+
           </tr>
           <tr>
         <th>Fee status:</th>
@@ -66,7 +67,8 @@
           <label for="route_name">Select a Route:</label>
           <select id="route_name" name="route_name">
             {% for route in routes %}
-            <option value="{{ route['route_name'] }}" {% if routes["route_name"] == route['route_name'] %}selected{% endif %}>{{ route['route_name'] }}</option>
+            <option value="{{ route['route_name'] }}" {% if routes["route_name"] == route['route_name'] %}selected{% endif %}>{{ route['route_name'] }} (₹{{ route['fee_per_semester'] }})</option>
+
           {% endfor %}
           </select>
           <br>

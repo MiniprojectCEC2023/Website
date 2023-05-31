@@ -60,12 +60,14 @@
                 <label for="title">Book title:</label>
                 <select id="title" name="title">
                   {% for book in books %}
-                    <option value="{{ book['title'] }}" {% if books["title"] == book['title'] %}selected{% endif %}>{{ book['title'] }}</option>
+                    {% set copies_available = book.get('copies_available', 0) %}
+                    <option value="{{ book['title'] }}" {% if books["title"] == book['title'] %}selected{% endif %}>{{ book['title'] }} ({{ copies_available }})</option>
                   {% endfor %}
                 </select>
                 <br>
                 <input type="submit" value="Borrow">
               </form>
+              
               
               
             
@@ -84,6 +86,7 @@
                 {% for book in book_loans %}
                 <option value="{{ book['title'] }}" {% if books["title"] == book['title'] %}selected{% endif %}>{{ book['title'] }}</option>
               {% endfor %}
+            </select>
               <br>
               <input type="submit" value="Return">
             </form>
