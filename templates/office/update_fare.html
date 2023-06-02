@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <form method="post">
+    <div class="form-group">
+      <label for="fare">Update Fare</label>
+      <input type="number" class="form-control" id="fare" name="fare"  value="{{ route.route_name }} " placeholder="{{ route.fee_per_semester }}">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Update">
+  </form>
+{% endblock %}

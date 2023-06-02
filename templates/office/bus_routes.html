@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <title>Bus Routes</title>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/college-office-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+        <h1>Bus Routes</h1>
+    </div>
+
+    <div class="add-book-btn">
+      <a href="/addroutes" class="view-btn">Add Routes</a>
+  </div>
+    {% if routes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Route Name</th>
+                    <th>Fee Per Semester</th>
+                    <th>Update Fare</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for route in routes %}
+                <tr>
+                    <td>{{ route['route_name'] }}</td>
+                    <td>₹{{ route['fee_per_semester'] }}</td>
+                    <td><a href="/edit-fare/{{ route['route_name'] }}" class="edit-btn"><i class="fas fa-edit"></i></a></td>
+                    <td>
+                        <form action="/delete-bus-route/{{ route['route_name'] }}" method="GET">
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bus routes found.</p>
+    {% endif %}
+    <div class="footer">
+        <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+    </div>
+</body>
+</html>

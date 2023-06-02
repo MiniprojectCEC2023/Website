@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/views.css') }}">
+    <title>Books</title>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="/librarian-dashboard" class="logout-btn"><i class="fas fa-home"></i></a>
+        <h1>Books</h1>
+        
+    </div>
+    
+    <div class="add-book-btn">
+        <a href="/addbooks" class="view-btn">Add Books</a>
+    </div>
+    
+    
+    {% if books %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Publication Date</th>
+                    <th>Copies Available</th>
+                    <th>Update Copies</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for book in books %}
+              <tr>
+                <td>{{ book['ID'] }}</td>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['author'] }}</td>
+                <td>{{ book['publication_date'] }}</td>
+                <td>{{ book['copies_available'] }}</td>
+                <td><a href="/edit-copies/{{ book['title'] }}" class="edit-btn"><i class="fas fa-edit"></i></a></td>
+              </tr>
+          {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No books found.</p>
+    {% endif %}
+  
+    <div class="footer">
+      <p>© 2023 College of Engineering Cherthala. All rights reserved.</p>
+    </div>
+</body>
+</html>
+

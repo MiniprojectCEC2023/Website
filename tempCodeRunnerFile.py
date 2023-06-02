@@ -1,3 +1,1 @@
-
-
-#INDEX_ROUTE
+fee_per_semester

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, session, flash, jsonify,session
 from pymongo import MongoClient
 import qrcode
 from bson.binary import Binary
@@ -17,7 +17,8 @@ from flask_pymongo import PyMongo
 import io
 from flask import send_file, abort
 import datetime
-from flask import request
+from flask_wtf import FlaskForm, csrf
+from wtforms import StringField
 
 mode='cloud'
 
@@ -130,15 +131,15 @@ def register():
         qr.save(img_io, "PNG")
         img_io.seek(0) """
         flash('Registration successful. Please log in.')
-        return redirect('/register-success')
+        return redirect('/view-students')
     else:
         return render_template('admin/register.html')
 
 
-#Route to return registration success message
+""" #Route to return registration success message
 @app.route("/register-success")
 def success():
-    return "Registration successful!"
+    return "Registration successful!" """
 
 
 # Route for students viewing for admin
@@ -439,6 +440,68 @@ def lib_profile_qr():
 
 
 
+# Route for students viewing for admin
+@app.route('/books')
+def view_books():
+    if session.get('username') == 'library':
+        books_cursor = db.books.find()
+        books = list(books_cursor)
+        return render_template('librarian/books.html', books=books)
+    else:
+        error = 'You need to log in as librarian first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/librarian-login')
+
+
+
+class EditCopiesForm(FlaskForm):
+    count = StringField('Count')
+
+@app.route('/edit-copies/<title>', methods=['GET', 'POST'])
+def edit_copies(title):
+    if session.get('username') == 'library':
+        book = db.books.find_one({'title': title})
+
+        if request.method == 'POST':
+            copies_available = int(request.form['count'])
+            db.books.update_one({'title': title}, {'$set': {'copies_available': copies_available}})
+            flash('Book record updated successfully')
+            return redirect('/books')
+        title = book['title'] 
+        return render_template('librarian/edit-copies.html', title=title, book=book)
+    else:
+        error = 'You need to log in as a librarian first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/librarian-login')
+
+
+
+@app.route('/addbooks', methods=['GET', 'POST'])
+def add_book():
+    if request.method == 'POST':
+        ID = int(request.form['ID'])
+        title = request.form['title']
+        author = request.form['author']
+        publication_date = request.form['publication_date']
+        copies_available = int(request.form['copies_available'])
+        
+        book = {
+            'ID': ID,
+            'title': title,
+            'author': author,
+            'publication_date': publication_date,
+            'copies_available': copies_available
+        }
+        
+        db.books.insert_one(book)
+        
+        flash('Book added successfully')
+        return redirect('/books')
+    
+    return render_template('librarian/addbooks.html')
+
 ################################################################
 #----------------------------OFFICE----------------------------#
 ################################################################
@@ -622,6 +685,77 @@ def bus_profile_qr():
     # Render a template that displays the document
     return render_template('office/bus_profile_scaned.html', student=student,routes=routes)
 
+@app.route('/bus_routes')
+def view_bus_routes():
+    if session.get('username') == 'office':
+        routes_cursor = db.routes.find()
+        routes = list(routes_cursor)
+        return render_template('office/bus_routes.html', routes=routes)
+    else:
+        error = 'You need to log in as office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/college-office-login')
+
+
+#Route to delete a bus student 
+@app.route('/delete-bus-route/<route_name>', methods=['GET'])
+def delete_bus_route(route_name):
+    if session.get('username') == 'office':
+        route = db.routes.find_one({'route_name': route_name})
+        if route:
+            db.routes.delete_one({'route_name': route_name})
+            flash('Bus route deleted successfully')
+        else:
+            flash('Bus route not found')
+        return redirect('/bus_routes')
+    else:
+        error = 'You need to log in as office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/office-login')
+
+
+@app.route('/edit-fare/<route_name>', methods=['GET', 'POST'])
+def edit_fare(route_name):
+    if session.get('username') == 'office':
+        route = db.routes.find_one({'route_name': route_name})
+
+        if route:
+            if request.method == 'POST':
+                fee_per_semester = int(request.form['fare'])
+                db.routes.update_one({'route_name': route_name}, {'$set': {'fee_per_semester': fee_per_semester}})
+                db.bus.update_one({'route_name': route_name}, {'$set': {'fee_per_semester': fee_per_semester}})
+                flash('Fare updated successfully')
+                return redirect('/bus_routes')
+            title=route['route_name']
+            return render_template('office/update_fare.html', title=title, route=route)
+        else:
+            flash('Bus route not found')
+            return redirect('/bus_routes')
+    else:
+        error = 'You need to log in as an office first.'
+        flash(error)
+        logging.warning(error)
+        return redirect('/office-login')
+
+@app.route('/addroutes', methods=['GET', 'POST'])
+def add_routes():
+    if request.method == 'POST':
+        route_name = request.form['route_name']
+        fee_per_semester = int(request.form['fee_per_semester'])
+        route = {
+        
+            'route_name': route_name,
+            'fee_per_semester': fee_per_semester
+        }
+        
+        db.routes.insert_one(route)
+        
+        flash('route added successfully')
+        return redirect('/bus_routes')
+    
+    return render_template('office/addroutes.html')
 
 
 ################################################################
