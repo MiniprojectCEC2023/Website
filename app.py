@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash, jsonify,session
+from flask import Flask, render_template, request, redirect, session, flash, jsonify,session,send_file,abort
 from pymongo import MongoClient
 import qrcode
 from bson.binary import Binary
@@ -15,7 +15,6 @@ import binascii
 from waitress import serve
 from flask_pymongo import PyMongo
 import io
-from flask import send_file, abort
 import datetime
 from flask_wtf import FlaskForm, csrf
 from wtforms import StringField
@@ -105,41 +104,35 @@ def register():
         gender = request.form.get("gender")
         branch = request.form.get("branch")
         semester = request.form.get("semester")
+        
         # Check if all required fields are filled
         if not name or not email or not register_number or not phone or not address or not dob or not gender or not branch or not semester:
             error = 'All fields are required'
-            flash(error)
-            logging.warning(error)
+            flash(error, 'error')  # Flash an error message
             return render_template('admin/register.html')
+
         # Check if email or register number already exists
         result = db.student.find_one({'$or': [{'email': email}, {'register_number': register_number}]})
         if result:
             error = 'Email or register number already exists'
-            flash(error)
-            logging.warning(error)
+            flash(error, 'error')  # Flash an error message
             return render_template('admin/register.html')
+
         # Generate the QR code
         data = f"Name: {name}, Email: {email}, Register Number: {register_number}"
         qr = qrcode.make(data)
         img = BytesIO()
         qr.save(img, "PNG")
         img.seek(0)
+        
         # Insert data and QR code image into the database
         db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()), 'added_to_library': 0, 'added_to_bus': 0})
-        # Save QR code as PNG image in specified folder
-        """ img_io = io.BytesIO()
-        qr.save(img_io, "PNG")
-        img_io.seek(0) """
-        flash('Registration successful. Please log in.')
+        
+        flash('Registration successful. Please log in.', 'success')  # Flash a success message
         return redirect('/view-students')
     else:
         return render_template('admin/register.html')
 
-
-""" #Route to return registration success message
-@app.route("/register-success")
-def success():
-    return "Registration successful!" """
 
 
 # Route for students viewing for admin
@@ -154,7 +147,6 @@ def view_students():
         flash(error)
         logging.warning(error)
         return redirect('/admin-login')
-
 
 
 # Route to update semester of students by admin
@@ -199,15 +191,14 @@ def delete_student(register_number):
         logging.warning(error)
         return redirect('/admin-login')
 
-from flask import send_file, abort
 
+#Route to download QR Code
 @app.route("/download-qr/<register_number>")
 def download_qr(register_number):
     # Retrieve the QR code image from the database
     result = db.student.find_one({'register_number': register_number})
     if not result or 'qr_code' not in result:
         abort(404)  # QR code not found or invalid
-
     qr_code = result['qr_code']
     return send_file(
         io.BytesIO(qr_code),
@@ -221,6 +212,7 @@ def download_qr(register_number):
 ################################################################
 #----------------------------LIBRARY---------------------------#
 ################################################################
+
 
 #Route to get librarian login page and login to librarian dashboard
 @app.route('/librarian-login', methods=['GET', 'POST'])
@@ -327,8 +319,7 @@ def lib_profile(register_number):
     return render_template('librarian/lib_profile.html', student=student,books=books,book_loans=book_loans)
 
 
-
-
+# Route for borrowing books
 @app.route('/borrow/<string:register_number>', methods=['POST'])
 def borrow(register_number):
     # Get the student ID and book ID from the request data
@@ -358,9 +349,7 @@ def borrow(register_number):
         return "Book not available for borrowing."
 
 
-
-
-
+#Route for returning book
 @app.route('/return/<string:register_number>', methods=['POST'])
 def return_book(register_number):
     # Get the book title from the request data
@@ -378,7 +367,6 @@ def return_book(register_number):
         return "Book returned successfully!"
     else:
         return "Unable to return book. Please check the book title and ensure that the book is currently on loan."
-
 
 
 
@@ -439,8 +427,7 @@ def lib_profile_qr():
     return render_template('librarian/lib_profile_scaned.html', student=student,books=books,book_loans=book_loans)
 
 
-
-# Route for students viewing for admin
+# Route for viewing books
 @app.route('/books')
 def view_books():
     if session.get('username') == 'library':
@@ -454,15 +441,13 @@ def view_books():
         return redirect('/librarian-login')
 
 
-
+#Route for updating number of copies
 class EditCopiesForm(FlaskForm):
     count = StringField('Count')
-
 @app.route('/edit-copies/<title>', methods=['GET', 'POST'])
 def edit_copies(title):
     if session.get('username') == 'library':
         book = db.books.find_one({'title': title})
-
         if request.method == 'POST':
             copies_available = int(request.form['count'])
             db.books.update_one({'title': title}, {'$set': {'copies_available': copies_available}})
@@ -477,7 +462,7 @@ def edit_copies(title):
         return redirect('/librarian-login')
 
 
-
+#Route to add books
 @app.route('/addbooks', methods=['GET', 'POST'])
 def add_book():
     if request.method == 'POST':
@@ -486,21 +471,18 @@ def add_book():
         author = request.form['author']
         publication_date = request.form['publication_date']
         copies_available = int(request.form['copies_available'])
-        
         book = {
             'ID': ID,
             'title': title,
             'author': author,
             'publication_date': publication_date,
             'copies_available': copies_available
-        }
-        
-        db.books.insert_one(book)
-        
+        }   
+        db.books.insert_one(book)  
         flash('Book added successfully')
-        return redirect('/books')
-    
+        return redirect('/books')  
     return render_template('librarian/addbooks.html')
+
 
 ################################################################
 #----------------------------OFFICE----------------------------#
@@ -685,6 +667,8 @@ def bus_profile_qr():
     # Render a template that displays the document
     return render_template('office/bus_profile_scaned.html', student=student,routes=routes)
 
+
+#Route to view bus routes
 @app.route('/bus_routes')
 def view_bus_routes():
     if session.get('username') == 'office':
@@ -698,7 +682,7 @@ def view_bus_routes():
         return redirect('/college-office-login')
 
 
-#Route to delete a bus student 
+#Route to delete  bus route
 @app.route('/delete-bus-route/<route_name>', methods=['GET'])
 def delete_bus_route(route_name):
     if session.get('username') == 'office':
@@ -716,11 +700,11 @@ def delete_bus_route(route_name):
         return redirect('/office-login')
 
 
+#Route to update bus fare
 @app.route('/edit-fare/<route_name>', methods=['GET', 'POST'])
 def edit_fare(route_name):
     if session.get('username') == 'office':
         route = db.routes.find_one({'route_name': route_name})
-
         if route:
             if request.method == 'POST':
                 fee_per_semester = int(request.form['fare'])
@@ -739,22 +723,20 @@ def edit_fare(route_name):
         logging.warning(error)
         return redirect('/office-login')
 
+
+#Route to add bus routes 
 @app.route('/addroutes', methods=['GET', 'POST'])
 def add_routes():
     if request.method == 'POST':
         route_name = request.form['route_name']
         fee_per_semester = int(request.form['fee_per_semester'])
         route = {
-        
             'route_name': route_name,
             'fee_per_semester': fee_per_semester
-        }
-        
-        db.routes.insert_one(route)
-        
+        }     
+        db.routes.insert_one(route) 
         flash('route added successfully')
-        return redirect('/bus_routes')
-    
+        return redirect('/bus_routes')  
     return render_template('office/addroutes.html')
 
 

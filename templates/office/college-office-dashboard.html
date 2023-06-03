@@ -4,22 +4,16 @@
     <title>Office Dashboard</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-<!-- 	<style>
-		body{
-	  background-image: url("/static/images/office.jpg");
-	  background-repeat: no-repeat;
-	  background-size: cover;
-	}
-	  </style> -->
 </head>
 <body>
     <div class="navbar">
 		<a href="/logout" class="logout-btn"><i class="fas fa-home"></i></a>
 		<h1>Office</h1>
+		<a href="/bus_routes" class="view-btn">Bus Routes</a>
 		<a href="/view-std-bus" class="add-btn">Add Students</a>
 		<a href="/reg_bus" class="view-btn">View-student</a>
         <a href="/qrbus" class="scan-btn">Scan_code</a>
-		<a href="/bus_routes" class="view-btn">Bus Routes</a>
+	
 		<a href="/logout" class="logout-btn">Logout</a>
 	</div>
 	<div class="footer">
