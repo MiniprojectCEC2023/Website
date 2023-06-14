@@ -117,7 +117,7 @@ def register():
             error = 'Email or register number already exists'
             flash(error, 'error')  # Flash an error message
             return render_template('admin/register.html')
-
+      
         # Generate the QR code
         data = f"Name: {name}, Email: {email}, Register Number: {register_number}"
         qr = qrcode.make(data)
@@ -126,8 +126,9 @@ def register():
         img.seek(0)
         
         # Insert data and QR code image into the database
-        db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()), 'added_to_library': 0, 'added_to_bus': 0})
-        
+        db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()),'added_to_bus': 0})
+        db.library.insert_one({'name': name, 'semester': semester, 'branch': branch, 'phone': phone, 'register_number': register_number, 'max_book': 4,'books_taken':0})
+
         flash('Registration successful. Please log in.', 'success')  # Flash a success message
         return redirect('/view-students')
     else:
@@ -244,56 +245,11 @@ def librarian_dashboard():
         return redirect('/librarian-login')
 
 
-# Route for viewing students who are not added to library by librarian
-@app.route('/view-std-lib')
-def view_std_lib():
-    if session.get('username') == 'library':
-        students = db.student.find({'added_to_library': 0})
-        return render_template('librarian/view-std-lib.html', students=students)
-    else:
-        error = 'You need to log in as librarian first.'
-        flash(error)
-        logging.warning(error)
-        return redirect('/librarian-login')
-
-
-#Route to add students to library
-@app.route('/add_lib/<register_number>', methods=['GET'])
-def add_to_lib(register_number):
-    if session.get('username') == 'library':
-        student = db.student.find_one({'register_number': register_number})
-        if student:
-            library_record = {
-                'name': student['name'],
-                'email': student['email'],
-                'semester': student['semester'],
-                'branch': student['branch'],
-                'register_number': student['register_number'],
-                'qr_code': student['qr_code'],
-                'max_book': 4,
-                'books_taken':0
-            }
-            db.library.insert_one(library_record)
-            db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 1}})
-            flash('Student record added to library successfully')
-            return redirect('/view-std-lib')
-        else:
-            error = 'Student not found.'
-            flash(error)
-            logging.warning(error)
-            return redirect('/view-student')
-    else:
-        error = 'You need to log in as librarian first.'
-        flash(error)
-        logging.warning(error)
-        return redirect('/librarian-login')
-
-
 #Route to view library students
 @app.route('/reg_lib')
 def reg_lib():
     if session.get('username') == 'library':
-        students = db.library.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1,'books_taken':1})
+        students = db.library.find({}, {'name': 1, 'register_number': 1, 'semester': 1,'books_taken':1})
         return render_template('librarian/reg_lib.html', students=students)
     else:
         error = 'You need to log in as librarian first.'
@@ -367,34 +323,6 @@ def return_book(register_number):
         return "Book returned successfully!"
     else:
         return "Unable to return book. Please check the book title and ensure that the book is currently on loan."
-
-
-
-# Route to delete library profile
-@app.route('/delete-std-lib/<register_number>', methods=['GET'])
-def delete_std_lib(register_number):
-    if session.get('username') == 'library':
-        student = db.library.find_one({'register_number': register_number})
-        if student:
-            books_taken = student.get('books_taken', 0)
-            if books_taken == 0:
-                db.library.delete_one({'register_number': register_number})
-                db.student.update_one({'register_number': register_number}, {'$set': {'added_to_library': 0}})
-                flash('Student record deleted successfully')
-            else:
-                flash('Cannot delete student record as they have books taken from the library')
-            return redirect('/reg_lib')
-        else:
-            error = 'Student record not found'
-            flash(error)
-            logging.warning(error)
-            return redirect('/reg_lib')
-    else:
-        error = 'You need to log in as librarian first.'
-        flash(error)
-        logging.warning(error)
-        return redirect('/librarian-login')
-
 
 
 #Route to open scanner
@@ -540,14 +468,12 @@ def add_to_bus(register_number):
         if student:
             bus_record = {
                 'name': student['name'],
-                'email': student['email'],
                 'semester': student['semester'],
                 'branch': student['branch'],
                 'register_number': student['register_number'],
-                'qr_code': student['qr_code'],
                 'fee_paid': "0",
-                'route_name':'Route A',
-                'fee_per_semester': 1500
+                'route_name':'',
+                'fee_per_semester': 0
             }
             db.bus.insert_one(bus_record)
             db.student.update_one({'register_number': register_number}, {'$set': {'added_to_bus': 1}})
@@ -569,7 +495,7 @@ def add_to_bus(register_number):
 @app.route('/reg_bus')
 def reg_bus():
     if session.get('username') == 'office':
-        students = db.bus.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1, 'fee_paid': 1})
+        students = db.bus.find({}, {'name': 1,  'register_number': 1, 'semester': 1, 'fee_paid': 1})
         return render_template('office/reg_bus.html', students=students)
     else:
         error = 'You need to log in as office first.'
