@@ -140,7 +140,7 @@ def register():
 @app.route('/view-students')
 def view_students():
     if session.get('username') == 'admin':
-        students_cursor = db.student.find({}, {'name': 1, 'email': 1, 'register_number': 1, 'semester': 1})
+        students_cursor = db.student.find({}, {'name': 1, 'branch': 1, 'register_number': 1, 'semester': 1})
         students = list(students_cursor)
         return render_template('admin/view-students.html', students=students)
     else:
@@ -208,6 +208,19 @@ def download_qr(register_number):
         attachment_filename=f"{register_number}_qr_code.png"
     )
 
+
+# Route to view profile of students
+@app.route('/profile/<string:register_number>')
+def profile(register_number):
+    # Get student's record from the database
+    student = db.student.find_one({'register_number': register_number})
+    # Check if student exists
+    if not student:
+        flash('Student not found.')
+        logging.warning('Student not found.')
+        return redirect('/')
+
+    return render_template('admin/profile.html', student=student)
 
 
 ################################################################
