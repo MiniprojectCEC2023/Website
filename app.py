@@ -127,7 +127,7 @@ def register():
         
         # Insert data and QR code image into the database
         db.student.insert_one({'name': name, 'email': email, 'register_number': register_number, 'phone': phone, 'address': address, 'dob': dob, 'gender': gender, 'branch': branch, 'semester': semester, 'qr_code': Binary(img.read()),'added_to_bus': 0})
-        db.library.insert_one({'name': name, 'semester': semester, 'branch': branch, 'phone': phone, 'register_number': register_number, 'max_book': 4,'books_taken':0})
+        db.library.insert_one({'name': name, 'semester': semester, 'branch': branch,'register_number': register_number, 'max_book': 4,'books_taken':0})
 
         flash('Registration successful. Please log in.', 'success')  # Flash a success message
         return redirect('/view-students')
