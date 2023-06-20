@@ -1,22 +1,24 @@
-from flask import Flask, render_template, request, redirect, session, flash, jsonify,session,send_file,abort
-from pymongo import MongoClient
+import base64
+import binascii
+import datetime
+import io
+import logging
+import math
+import os
+from io import BytesIO
+from typing import List, Tuple
+
+import PIL
 import qrcode
 from bson.binary import Binary
-from io import BytesIO
-import PIL
-from PIL import Image
-from pyzbar.pyzbar import decode
-import base64
-import logging
-import os
-import math
-from typing import List, Tuple
-import binascii
-from waitress import serve
+from flask import (Flask, abort, flash, jsonify, redirect, render_template,
+                   request, send_file, session)
 from flask_pymongo import PyMongo
-import io
-import datetime
 from flask_wtf import FlaskForm, csrf
+from PIL import Image
+from pymongo import MongoClient
+from pyzbar.pyzbar import decode
+from waitress import serve
 from wtforms import StringField
 
 mode='cloud'
@@ -608,7 +610,7 @@ def add_routes():
         return redirect('/bus_routes')  
     return render_template('office/addroutes.html')
   else:
-        return redirect('/office-login')
+    return redirect('/office-login')
 
 ################################################################
 #----------------------------LOGOUT----------------------------#
@@ -622,7 +624,7 @@ def logout():
     return redirect('/')
 
     
-mode='dev'
+mode='pro'
 if __name__ == '__main__':
     if mode=='dev':
          app.run(host='0.0.0.0', port=5000,debug=True)
