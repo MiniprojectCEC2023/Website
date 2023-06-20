@@ -1,1 +1,2 @@
-fee_per_semester
+class EditCopiesForm(FlaskForm):
+    count = StringField('Count')
