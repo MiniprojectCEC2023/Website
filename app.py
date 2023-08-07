@@ -6,7 +6,7 @@ import logging
 import math
 import os
 from io import BytesIO
-from typing import List, Tuple
+from typing import List, Tuple  
 
 import PIL
 import qrcode
@@ -20,7 +20,6 @@ from pymongo import MongoClient
 from pyzbar.pyzbar import decode
 from waitress import serve
 from wtforms import StringField
-
 mode='cloud'
 
 if mode=='local':
@@ -158,10 +157,14 @@ def delete_student(register_number):
             db.library.delete_many({'register_number': register_number})
             db.bus.delete_many({'register_number': register_number})
             db.book_loans.delete_many({'register_number': register_number})
-        else:
+            # If the student is deleted successfully, redirect to the view-students page.
             return redirect('/view-students')
+        else:
+            # If the student does not exist, display a message or redirect to the view-students page.
+            return "Student not found."  # You can customize the message as needed.
     else:
         return redirect('/admin-login')
+
 
 
 #Route to download QR Code
@@ -563,7 +566,6 @@ def view_bus_routes():
         return redirect('/college-office-login')
 
 
-#Route to delete  bus route
 @app.route('/delete-bus-route/<route_name>', methods=['GET'])
 def delete_bus_route(route_name):
     if session.get('username') == 'office':
@@ -571,9 +573,14 @@ def delete_bus_route(route_name):
         if route:
             db.routes.delete_one({'route_name': route_name})
         else:
-         return redirect('/bus_routes')
+            return redirect('/bus_routes')  # Correct the indentation for this line
     else:
         return redirect('/office-login')
+
+    # If the route is deleted successfully or if the user is not 'office',
+    # redirect them to the bus_routes page.
+    return redirect('/bus_routes')
+
 
 
 #Route to update bus fare
@@ -624,7 +631,7 @@ def logout():
     return redirect('/')
 
     
-mode='pro'
+mode='dev'
 if __name__ == '__main__':
     if mode=='dev':
          app.run(host='0.0.0.0', port=5000,debug=True)
